@@ -1,4 +1,6 @@
 
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:project_week8/database/datamodel.dart';
@@ -38,37 +40,13 @@ signup.notifyListeners();
 }
 
 
-
-// ValueNotifier<List<CategoryModel>>category=ValueNotifier([]);
-
-// Future<void>saveData(CategoryModel value)async{
-//   final saveDB=await Hive.openBox<CategoryModel>('save data');
-//   // ignore: no_leading_underscores_for_local_identifiers
-//   final _id =await saveDB.add(value);
-//   value.id=_id;
-//   await saveDB.add(value);
-//   category.value.add(value);  
-//   saveDB.close();
-//   category.notifyListeners();
-
- 
-// }
-// Future<void>updateCategory()async{
-//   final saveDB=await Hive.openBox<CategoryModel>('save data');  
-//   print(saveDB.values.toList());
-//   category.value.clear();
-//   category.value.addAll(saveDB.values);
-// }
-
-// Future<void>deleteData(int id)async{
-// final saveDB=await Hive.openBox<CategoryModel>('save data');
-//  await   saveDB.delete(id);
-     
-//  updateCategory();
-// }
-
 ValueNotifier<List<CategoryModel>>category=ValueNotifier([]);
+
+
+
 Future<int> saveData(CategoryModel value) async {
+
+
   final saveDB = await Hive.openBox<CategoryModel>('save data');
   final _id = await saveDB.add(value);
   value.id = _id;
@@ -131,6 +109,51 @@ final subcategoryDB=await Hive.openBox<BookModel>('sub category');
 await subcategoryDB.delete(id);
 updatebookcategory();
 }
+
+
+
+
+ValueNotifier<List<ProductModel>>product=ValueNotifier([]);
+
+Future<void>addProduct(ProductModel value)async{
+
+  final productDB=await Hive.openBox<ProductModel>('product value');
+  await productDB.add(value);
+  print('success');
+  product.value.add(value);
+  product.notifyListeners();
+   
+}
+Future<void>saveProduct()async{
+  final productDB=await Hive.openBox<ProductModel>('product value');
+  product.value.clear();
+  product.value.addAll(productDB.values);
+  product.notifyListeners();
+   
+}
+
+ValueNotifier<List<SellProductModel>>sell=ValueNotifier([]);
+
+Future<void>addSellproduct(SellProductModel value)async{
+
+final sellDB=await Hive.openBox<SellProductModel>('sell value');
+print('hello');
+await sellDB.add(value);
+sell.value.add(value);
+sell.notifyListeners();
+
+}
+Future<void>saveSellProduct()async{
+
+final sellDB=await Hive.openBox<SellProductModel>('sell value');
+sell.value.clear();
+sell.value.addAll(sellDB.values);
+sell.notifyListeners();
+
+}
+
+
+
 
 
 

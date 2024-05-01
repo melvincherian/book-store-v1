@@ -93,6 +93,8 @@ class _EditProfileState extends State<EditProfile> {
                           keyboardType: TextInputType.name,
                           controller: usernameController,
                           decoration: InputDecoration(
+                              contentPadding:const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 20),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -110,6 +112,8 @@ class _EditProfileState extends State<EditProfile> {
                           keyboardType: TextInputType.emailAddress,
                           controller: emailController,
                           decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 20),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -127,6 +131,8 @@ class _EditProfileState extends State<EditProfile> {
                           keyboardType: TextInputType.number,
                           controller: passController,
                           decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 20),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -144,6 +150,8 @@ class _EditProfileState extends State<EditProfile> {
                           keyboardType: TextInputType.text,
                           controller: confirmController,
                           decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 18, horizontal: 20),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                               ),
@@ -167,20 +175,8 @@ class _EditProfileState extends State<EditProfile> {
                     }
                     saveImage();
                   },
-                  child: const Text('Save')),
-              IconButton(
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        backgroundColor: Colors.green,
-                        content: Text(
-                          'Profile updated successfully',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
-                    );
-                  },
-                  icon: const Icon(Icons.save))
+                  child: const Text('Update Profile')),
+              
             ],
           ),
         ),
@@ -212,7 +208,7 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.green,
           content: Text(
-            'Image saved successfully',
+            'Profile updated successfully',
             style: TextStyle(color: Colors.black),
           )));
     } else {
@@ -250,14 +246,14 @@ class _EditProfileState extends State<EditProfile> {
       ));
     }
   }
-   
+
   Future<void> getAlldata() async {
     final bookDB = await Hive.openBox<SignUpModel>('login_db');
     setState(() {
       userData.clear(); // Clear existing user data
       userData.addAll(bookDB.values); // Add all user data from the database
     });
-     
+
     // Set retrieved data to the corresponding text controllers
     if (userData.isNotEmpty) {
       setState(() {

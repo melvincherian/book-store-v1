@@ -16,6 +16,12 @@ Future<void> main()async{
    if(!Hive.isAdapterRegistered(BookModelAdapter().typeId)){
     Hive.registerAdapter(BookModelAdapter());
   }
+  if(!Hive.isAdapterRegistered(ProductModelAdapter().typeId)){
+    Hive.registerAdapter(ProductModelAdapter());
+  }
+  if(!Hive.isAdapterRegistered(SellProductModelAdapter().typeId)){
+    Hive.registerAdapter(SellProductModelAdapter());
+  }
   runApp(Myapp());
 }
 

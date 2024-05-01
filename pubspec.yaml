@@ -71,6 +71,8 @@ flutter:
     - assets\1634841577357.jpeg
     - assets\images\edit-profile-vector-icon.jpg
     - assets\camera.png
+    - assets\images\depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg
+    - assets\images\addimage.jpg
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

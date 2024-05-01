@@ -4,8 +4,6 @@ import 'package:project_week8/screens/home.dart';
 import 'package:project_week8/screens/login.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-
 class ScreenSplash extends StatefulWidget {
   const ScreenSplash({super.key});
 
@@ -13,11 +11,7 @@ class ScreenSplash extends StatefulWidget {
   State<ScreenSplash> createState() => _ScreenSplashState();
 }
 
-
-
 class _ScreenSplashState extends State<ScreenSplash> {
-  
-
   @override
   void initState() {
     checkSharedpreference();
@@ -38,6 +32,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
           height: 300,
           width: 400,
         ),
+        
       ),
     );
   }

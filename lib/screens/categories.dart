@@ -4,10 +4,11 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
 import 'package:project_week8/screens/editcategory.dart';
+import 'package:project_week8/screens/favourites.dart';
 import 'package:project_week8/screens/home.dart';
+import 'package:project_week8/screens/newcategory.dart';
 import 'package:project_week8/screens/profile.dart';
 import 'package:project_week8/screens/addcategory.dart';
-
 
 class MyCategories extends StatefulWidget {
   const MyCategories({Key? key}) : super(key: key);
@@ -17,6 +18,8 @@ class MyCategories extends StatefulWidget {
 }
 
 class _MyCategoriesState extends State<MyCategories> {
+  int _selectedIndex = 1; // Keep track of the selected index
+
   List<CategoryModel> categoryData = [];
   bool isDataFetched = false;
 
@@ -30,7 +33,6 @@ class _MyCategoriesState extends State<MyCategories> {
   }
 
   Future<void> fetchData() async {
-    
     categoryData = await saveData();
   }
 
@@ -40,7 +42,7 @@ class _MyCategoriesState extends State<MyCategories> {
       backgroundColor: const Color.fromARGB(255, 229, 235, 240),
       appBar: AppBar(
         title: const Text(
-          'Categories',
+          'Category',
           style: TextStyle(
             fontSize: 38,
             color: Colors.black,
@@ -63,7 +65,7 @@ class _MyCategoriesState extends State<MyCategories> {
       ),
       body: Column(
         children: [
-       const   SizedBox(height: 10),
+          const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             alignment: Alignment.center,
@@ -74,12 +76,10 @@ class _MyCategoriesState extends State<MyCategories> {
                   hintText: 'Search',
                   prefixIcon: const Icon(Icons.search),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(25),
                   ),
                 ),
-                onChanged: (value) {
-                  // Handle search query
-                },
+                onChanged: (value) {},
               ),
             ),
           ),
@@ -98,111 +98,87 @@ class _MyCategoriesState extends State<MyCategories> {
                 } else {
                   return GridView.builder(
                     itemCount: categoryData.length,
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1, // Adjust aspect ratio as needed
+                    ),
                     itemBuilder: (context, index) {
                       final CategoryModel category = categoryData[index];
-                      if (File(category.image).existsSync()) {
-                        return GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const AddCategory(),
-                              ),
-                            );
-                          },
+                      return GestureDetector(
+                        onTap: () {
+                          // Navigate to another page here
+                          // For example:
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AddCategory(),
+                            ),
+                          );
+                        },
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
                           child: Stack(
+                            fit: StackFit.expand,
                             children: [
-                              Container(
-                                width: 160,
-                                height: 160,
-                                margin: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: FileImage(File(category.image)),
+                              if (category.image.isNotEmpty &&
+                                  File(category.image).existsSync())
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(10),
+                                  child: Image.file(
+                                    File(category.image),
                                     fit: BoxFit.cover,
                                   ),
                                 ),
-                              ),
                               Positioned(
                                 bottom: 0,
                                 left: 0,
                                 right: 0,
-                                child: Text(
-                                  category.name,
-                                  textAlign: TextAlign.center,
-                                  style:const TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
+                                child: Container(
+                                  padding: const EdgeInsets.all(8),
+                                  color: Colors.black54,
+                                  child: Text(
+                                    category.name,
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                               ),
                               Positioned(
-                                top: 1,
-                                right: 1,
-                                child: IconButton(
-                                  onPressed: () async {
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return AlertDialog(
-                                          title: const Text("Confirm Deletion"),
-                                          content: const Text(
-                                              "Are you sure you want to delete this category?"),
-                                          actions: <Widget>[
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("Cancel"),
-                                            ),
-                                            TextButton(
-                                              onPressed: () async {
-                                                await deleteCategory(
-                                                    category.id!);
-                                                // ignore: use_build_context_synchronously
-                                                Navigator.of(context).pop();
-                                              },
-                                              child: const Text("Delete"),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                top: 8,
+                                right: 8,
+                                child: PopupMenuButton(
+                                  color: Colors.white,
+                                  itemBuilder: (context) => [
+                                    const PopupMenuItem(
+                                      value: 'edit',
+                                      child: Text('Edit'),
+                                    ),
+                                    const PopupMenuItem(
+                                      value: 'delete',
+                                      child: Text('Delete'),
+                                    ),
+                                  ],
+                                  onSelected: (value) {
+                                    if (value == 'edit') {
+                                      _navigateToEditCategory(context, category);
+                                    } else if (value == 'delete') {
+                                      _confirmDelete(context, category);
+                                    }
                                   },
-                                  icon: const Icon(
-                                    Icons.delete,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              Positioned(
-                                top: 50,
-                                right: 1,
-                                child: IconButton(
-                                  onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=>EditCategory(category: category)));
-                                    
-                                  },
-                                  icon: const Icon(Icons.edit),
                                 ),
                               ),
                             ],
                           ),
-                        );
-                      } else {
-                        return Container(
-                          width: 160,
-                          height: 160,
-                          margin: const EdgeInsets.all(8),
-                        );
-                      }
+                        ),
+                      );
                     },
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 2 / 2,
-                    ),
                   );
                 }
               },
@@ -211,59 +187,90 @@ class _MyCategoriesState extends State<MyCategories> {
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(
-        items: [
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: (int index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          switch (index) {
+            case 0:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScreenHome(),
+                ),
+              );
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MyCategories(),
+                ),
+              );
+              break;
+            case 2:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScreenProfile(),
+                ),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScreenFavourite(),
+                ),
+              );
+              break;
+            default:
+          }
+        },
+        items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: IconButton(
-              iconSize: 30,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ScreenHome(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.home),
+            icon: Icon(
+              Icons.home,
             ),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(
-              iconSize: 30,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const MyCategories(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.add_box),
-              color: Colors.blue,
+            icon: Icon(
+              Icons.add_box,
             ),
-            label: 'Categories',
+            label: 'Category',
           ),
           BottomNavigationBarItem(
-            icon: IconButton(
-              iconSize: 30,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ScreenProfile(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.person),
-              color: Colors.blue,
+            icon: Icon(
+              Icons.person,
             ),
             label: 'Profile',
           ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.favorite,
+            ),
+            label: 'Favorites',
+          ),
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NewCategory(),
+            ),
+          );
+        },
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.blue, // Customize the FAB color as needed
       ),
     );
   }
-   
+
   Future<List<CategoryModel>> saveData() async {
     final saveDB = await Hive.openBox<CategoryModel>('save data');
     final List<CategoryModel> data = saveDB.values.toList();
@@ -285,5 +292,43 @@ class _MyCategoriesState extends State<MyCategories> {
     setState(() {
       categoryData.removeWhere((element) => element.id == id);
     });
+  }
+
+  Future<void> _confirmDelete(
+      BuildContext context, CategoryModel category) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Confirm Deletion"),
+          content: const Text("Are you sure you want to delete this category?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await deleteCategory(category.id!);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _navigateToEditCategory(BuildContext context, CategoryModel category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditCategory(category: category),
+      ),
+    );
   }
 }

@@ -21,6 +21,7 @@ class _ScreenLogoutState extends State<ScreenLogout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromARGB(255, 243, 247, 250),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -41,9 +42,9 @@ class _ScreenLogoutState extends State<ScreenLogout> {
                       },
                       icon: const Icon(Icons.arrow_back),
                     ),
-                    const SizedBox(width: 40),
+                    const SizedBox(width: 70),
                     const Text(
-                      'Sign Up Page',
+                      'Welcome ',
                       style: TextStyle(
                           fontSize: 40,
                           color: Colors.black,
@@ -72,6 +73,12 @@ class _ScreenLogoutState extends State<ScreenLogout> {
                           if (value == null || value.isEmpty) {
                             return 'Username is required';
                           }
+                          if (!RegExp(r'^[a-zA-Z0-9_]+$').hasMatch(value)) {
+                            return 'Username must contain only letters, numbers, or underscores';
+                          }
+                          if (value.length < 3 || value.length > 20) {
+                            return 'Username must be between 3 and 20 characters';
+                          }
                           return null;
                         },
                       ),
@@ -90,6 +97,10 @@ class _ScreenLogoutState extends State<ScreenLogout> {
                             return 'Email is required';
                           }
                           if (!isValidEmail(value)) {
+                            return 'Invalid email format';
+                          }
+                          if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                              .hasMatch(value)) {
                             return 'Invalid email format';
                           }
                           return null;
@@ -125,6 +136,15 @@ class _ScreenLogoutState extends State<ScreenLogout> {
                           }
                           if (value.length < 7) {
                             return 'Password must contain at least 7 characters';
+                          }
+                          if (!value.contains(RegExp(r'[A-Z]'))) {
+                            return 'Password must contain at least one uppercase letter';
+                          }
+                          if (!value.contains(RegExp(r'[a-z]'))) {
+                            return 'Password must contain at least one lowercase letter';
+                          }
+                          if (!value.contains(RegExp(r'[0-9]'))) {
+                            return 'Password must contain at least one number';
                           }
                           return null;
                         },
@@ -177,7 +197,9 @@ class _ScreenLogoutState extends State<ScreenLogout> {
                     print('Data is empty or invalid');
                   }
                 },
+                
                 child: const Text(
+                  
                   'Sign Up',
                   style: TextStyle(fontSize: 20),
                 ),

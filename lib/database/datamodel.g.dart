@@ -128,3 +128,95 @@ class BookModelAdapter extends TypeAdapter<BookModel> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+class ProductModelAdapter extends TypeAdapter<ProductModel> {
+  @override
+  final int typeId = 4;
+
+  @override
+  ProductModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return ProductModel(
+      bookname: fields[0] as String,
+      authorname: fields[1] as String,
+      price: fields[2] as String,
+      volume: fields[3] as String,
+      count: fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, ProductModel obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.bookname)
+      ..writeByte(1)
+      ..write(obj.authorname)
+      ..writeByte(2)
+      ..write(obj.price)
+      ..writeByte(3)
+      ..write(obj.volume)
+      ..writeByte(4)
+      ..write(obj.count);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ProductModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
+class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
+  @override
+  final int typeId = 5;
+
+  @override
+  SellProductModel read(BinaryReader reader) {
+    final numOfFields = reader.readByte();
+    final fields = <int, dynamic>{
+      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
+    };
+    return SellProductModel(
+      name: fields[0] as String,
+      phonenumber: fields[1] as String,
+      product: fields[2] as String,
+      discount: fields[3] as String,
+      price: fields[4] as String,
+    );
+  }
+
+  @override
+  void write(BinaryWriter writer, SellProductModel obj) {
+    writer
+      ..writeByte(5)
+      ..writeByte(0)
+      ..write(obj.name)
+      ..writeByte(1)
+      ..write(obj.phonenumber)
+      ..writeByte(2)
+      ..write(obj.product)
+      ..writeByte(3)
+      ..write(obj.discount)
+      ..writeByte(4)
+      ..write(obj.price);
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SellProductModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}

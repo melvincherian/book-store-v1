@@ -16,10 +16,9 @@ class ScreenLogin extends StatefulWidget {
 
 class _ScreenLoginState extends State<ScreenLogin> {
   final TextEditingController emailController = TextEditingController();
-
   final TextEditingController passwordController = TextEditingController();
-
   final _formKey = GlobalKey<FormState>();
+  bool _isObscure = true; // State variable to track password visibility
 
   @override
   void initState() {
@@ -30,6 +29,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:const Color.fromARGB(255, 249, 249, 249),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -39,7 +39,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
               const SizedBox(
                 height: 100,
                 child: Text(
-                  'Login Page',
+                  'Login Here!',
                   style: TextStyle(
                       fontSize: 50,
                       color: Colors.black,
@@ -61,7 +61,9 @@ class _ScreenLoginState extends State<ScreenLogin> {
                           ),
                           labelText: 'Email',
                           hintText: 'Email',
+                          
                         ),
+                         onChanged: (_) => _formKey.currentState!.validate(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Email is required';
@@ -75,14 +77,27 @@ class _ScreenLoginState extends State<ScreenLogin> {
                       TextFormField(
                         keyboardType: TextInputType.text,
                         controller: passwordController,
-                        obscureText: true,
+                        obscureText: _isObscure, // Toggle password visibility
                         decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30)),
-                            hintText: 'Password',
-                            suffixIcon:
-                                const Icon(Icons.remove_red_eye_rounded),
-                            labelText: 'Password'),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30),
+                          ),
+                          hintText: 'Password',
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isObscure = !_isObscure; // Toggle visibility
+                              });
+                            },
+                            icon: Icon(
+                              _isObscure
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
+                        ),
+                        onChanged: (_) => _formKey.currentState!.validate(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Password is required';
@@ -107,11 +122,11 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
+                      borderRadius: BorderRadius.circular(23),
                     ),
                   ),
                   fixedSize: MaterialStateProperty.all<Size>(
-                    const Size(380, 50),
+                    const Size(200, 50),
                   ),
                 ),
                 child: const Text('Login'),

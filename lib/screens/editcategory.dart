@@ -56,8 +56,8 @@ class _EditCategoryState extends State<EditCategory> {
                 ),
               ),
               SizedBox(
-                width: 180,
-                height: 180,
+                width: 80,
+                height: 80,
                 child: GestureDetector(
                   onTap: _pickImage,
                   child: Container(
@@ -75,6 +75,7 @@ class _EditCategoryState extends State<EditCategory> {
                         ? Image.asset(
                             'assets/camera.png',
                             fit: BoxFit.cover,
+                            
                           )
                         : null,
                   ),
@@ -83,10 +84,12 @@ class _EditCategoryState extends State<EditCategory> {
               const SizedBox(height: 20),
               TextField(
                 controller: nameController,
-                decoration:const InputDecoration(
-                  
-                  labelText: 'Category Name'),
-                  
+                decoration: InputDecoration(
+                 
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    hintText: 'Category name',
+                    labelText: 'Category name'),
               ),
               const SizedBox(height: 30),
               ElevatedButton(
@@ -102,7 +105,7 @@ class _EditCategoryState extends State<EditCategory> {
                     // Update the category in the database
                     await updateCategory(updatedCategory);
 
-                    // Show a snackbar indicating successful update
+                    // ignore: use_build_context_synchronously
                     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                       backgroundColor: Colors.green,
                       content: Text(
@@ -112,6 +115,7 @@ class _EditCategoryState extends State<EditCategory> {
                     ));
 
                     // Pass back the updated image path to the previous screen
+                    // ignore: use_build_context_synchronously
                     Navigator.pop(context, image!.path);
                   } else {
                     // Show a snackbar if no image is selected
@@ -141,6 +145,7 @@ class _EditCategoryState extends State<EditCategory> {
         image = File(pickedFile.path);
       });
     } else {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         backgroundColor: Colors.red,
         content: Text(

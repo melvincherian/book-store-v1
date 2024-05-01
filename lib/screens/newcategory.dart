@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
-import 'package:project_week8/screens/profile.dart';
+import 'package:project_week8/screens/categories.dart';
 
 class NewCategory extends StatefulWidget {
   final CategoryModel? category;
@@ -39,7 +39,7 @@ class _NewCategoryState extends State<NewCategory> {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const ScreenProfile(),
+                builder: (context) => const MyCategories(),
               ),
             );
           },
@@ -55,20 +55,20 @@ class _NewCategoryState extends State<NewCategory> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 40),
               GestureDetector(
                 onTap: getImage,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(width: 110),
+                    const SizedBox(width: 160),
                     CircleAvatar(
                       backgroundImage: image != null ? FileImage(image!) : null,
-                      radius: 100,
+                      radius: 50,
                       child: image == null
                           ? Image.asset(
-                              'assets/1634841577357.jpeg',
+                              'assets/images/addimage.jpg',
                               fit: BoxFit.cover,
                             )
                           : null,
@@ -81,9 +81,11 @@ class _NewCategoryState extends State<NewCategory> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextFormField(
                   controller: nameController,
-                  decoration:const InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Category Name',
-                    border: OutlineInputBorder(),
+                    // border: OutlineInputBorder(
+                    //   borderRadius: BorderRadius.circular(30),
+                    // ),
                   ),
                 ),
               ),
@@ -92,7 +94,7 @@ class _NewCategoryState extends State<NewCategory> {
                 onPressed: () {
                   saveImage();
                 },
-                child: const Text('Save'),
+                child: const Text('Add'),
               ),
             ],
           ),
@@ -110,7 +112,7 @@ class _NewCategoryState extends State<NewCategory> {
       });
     }
   }
- 
+
   Future<void> saveImage() async {
     if (image != null) {
       if (nameController.text.isEmpty) {
@@ -130,7 +132,7 @@ class _NewCategoryState extends State<NewCategory> {
         const SnackBar(
           backgroundColor: Colors.green,
           content: Text(
-            'Image saved successfully',
+            'category added successfully',
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -143,13 +145,13 @@ class _NewCategoryState extends State<NewCategory> {
       );
       final int id = await saveData(categoryModel);
       categoryModel.id = id;
-      saveData(categoryModel);
+      // saveData(categoryModel);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
           content: Text(
-            'No image selected!',
+            'Please select an image!',
             style: TextStyle(color: Colors.black),
           ),
         ),
