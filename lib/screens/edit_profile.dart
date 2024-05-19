@@ -1,9 +1,12 @@
+// ignore_for_file: file_names
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
-import 'package:project_week8/screens/profile.dart';
+import 'package:project_week8/screens/Profile_Page.dart';
+
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

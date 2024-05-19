@@ -145,13 +145,15 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       price: fields[2] as String,
       volume: fields[3] as String,
       count: fields[4] as String,
+      id: fields[5] as int?,
+      categoryName: fields[6] as String,
     );
   }
 
   @override
   void write(BinaryWriter writer, ProductModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.bookname)
       ..writeByte(1)
@@ -161,7 +163,11 @@ class ProductModelAdapter extends TypeAdapter<ProductModel> {
       ..writeByte(3)
       ..write(obj.volume)
       ..writeByte(4)
-      ..write(obj.count);
+      ..write(obj.count)
+      ..writeByte(5)
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.categoryName);
   }
 
   @override
@@ -191,13 +197,14 @@ class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
       product: fields[2] as String,
       discount: fields[3] as String,
       price: fields[4] as String,
+      id: fields[5] as int?,
     );
   }
 
   @override
   void write(BinaryWriter writer, SellProductModel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -207,7 +214,9 @@ class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
       ..writeByte(3)
       ..write(obj.discount)
       ..writeByte(4)
-      ..write(obj.price);
+      ..write(obj.price)
+      ..writeByte(5)
+      ..write(obj.id);
   }
 
   @override

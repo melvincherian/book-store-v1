@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -6,26 +8,22 @@ import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
 
 class AddBookPage extends StatefulWidget {
-  const AddBookPage({Key? key}) : super(key: key);
+  final List<String> addedCategoryNames; // Added category names parameter
+
+  const AddBookPage({Key? key, required this.addedCategoryNames}) : super(key: key);
 
   @override
   _AddBookPageState createState() => _AddBookPageState();
 }
 
 class _AddBookPageState extends State<AddBookPage> {
-  @override
-  void initState() {
-    saveProduct();
-    super.initState();
-  }
-
   File? _image;
   final TextEditingController _authorController = TextEditingController();
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _volumeController = TextEditingController();
   final TextEditingController _bookNameController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
-
+  final TextEditingController _selectCategory = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _pickImage() async {
@@ -42,6 +40,7 @@ class _AddBookPageState extends State<AddBookPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+    
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -141,6 +140,45 @@ class _AddBookPageState extends State<AddBookPage> {
                 },
               ),
               const SizedBox(height: 20),
+              TextFormField(
+                controller: _selectCategory,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(25)),
+                    hintText: 'Select Category'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the category name';
+                  }
+                  return null;
+                },
+                onTap: () {
+                  // Show category names when the field is tapped
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Select Category'),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: widget.addedCategoryNames.map((categoryName) {
+                            return ListTile(
+                              title: Text(categoryName),
+                              onTap: () {
+                                setState(() {
+                                  _selectCategory.text = categoryName;
+                                });
+                                Navigator.pop(context); // Close the dialog
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
@@ -150,10 +188,12 @@ class _AddBookPageState extends State<AddBookPage> {
                       price: _priceController.text,
                       volume: _volumeController.text,
                       count: _countController.text,
+                      categoryName: _selectCategory.text,
+                      id: null,
                     );
                     await addProduct(newproduct);
+
                     // Save book data and image
-                    // ignore: use_build_context_synchronously
                     Navigator.pop(context, {
                       'image': _image,
                       'author': _authorController.text,
@@ -161,6 +201,7 @@ class _AddBookPageState extends State<AddBookPage> {
                       'volume': _volumeController.text,
                       'bookName': _bookNameController.text,
                       'count': _countController.text,
+                      'category': _selectCategory.text,
                     });
                   }
                 },

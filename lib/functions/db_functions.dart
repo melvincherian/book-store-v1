@@ -1,5 +1,5 @@
 
-// ignore_for_file: invalid_use_of_visible_for_testing_member
+// ignore_for_file: invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -75,56 +75,24 @@ Future<void>deleteData(int id)async{
 
 
 
-
-
-
-ValueNotifier<List<BookModel>>subcategory=ValueNotifier([]);
-
-
-Future<void>subData(BookModel value)async{
-
-
-final subcategoryDB=await Hive.openBox<BookModel>('sub category');
-  final _id =await subcategoryDB.add(value);
-  value.id=_id;
-await subcategoryDB.add(value);
-subcategory.value.add(value);
-subcategoryDB.close();
-subcategory.notifyListeners();
-
-
-
-}
-
-Future<void>updatebookcategory()async{
-  final subcategoryDB=await Hive.openBox('sub category');
-  subcategory.value.clear();
-  subcategory.value.addAll(subcategoryDB.values.cast<BookModel>().toList());
-}
-
-Future<void>deletebookcategory(int id)async{
-
-final subcategoryDB=await Hive.openBox<BookModel>('sub category');
-
-await subcategoryDB.delete(id);
-updatebookcategory();
-}
-
-
-
-
 ValueNotifier<List<ProductModel>>product=ValueNotifier([]);
 
 Future<void>addProduct(ProductModel value)async{
 
   final productDB=await Hive.openBox<ProductModel>('product value');
+  // ignore: no_leading_underscores_for_local_identifiers
+  final _id=await productDB.add(value);
+  value.id=_id;
   await productDB.add(value);
+  // ignore: avoid_print
   print('success');
   product.value.add(value);
   product.notifyListeners();
    
 }
 Future<void>saveProduct()async{
+  // List<ProductModel>finallist=[];
+
   final productDB=await Hive.openBox<ProductModel>('product value');
   product.value.clear();
   product.value.addAll(productDB.values);
@@ -132,11 +100,37 @@ Future<void>saveProduct()async{
    
 }
 
+
+
+
+Future<void> deleteProduct(int id) async {
+  final productDB = await Hive.openBox<ProductModel>('product value');
+  productDB.delete(id);
+  product.value.removeWhere((element) => element.id == id);
+  product.notifyListeners();
+}
+
+
+Future<void>updateProduct(ProductModel updatedProduct)async{
+  final productDB=await Hive.openBox<ProductModel>('product value');
+  productDB.put(updatedProduct.id!, updatedProduct);
+  product.value.clear();
+
+  product.value.addAll(productDB.values);
+  productDB.close();
+  product.notifyListeners();
+}
+
+
+
+
+
 ValueNotifier<List<SellProductModel>>sell=ValueNotifier([]);
 
 Future<void>addSellproduct(SellProductModel value)async{
 
 final sellDB=await Hive.openBox<SellProductModel>('sell value');
+// ignore: avoid_print
 print('hello');
 await sellDB.add(value);
 sell.value.add(value);
@@ -150,6 +144,12 @@ sell.value.clear();
 sell.value.addAll(sellDB.values);
 sell.notifyListeners();
 
+}
+Future<void>deleteSellproduct(int id)async{
+  final sellDB=await Hive.openBox<SellProductModel>('sell value');
+  sellDB.delete(id);
+  sell.value.removeWhere((element) => element.id==id);
+  sell.notifyListeners();
 }
 
 

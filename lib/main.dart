@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:project_week8/database/datamodel.dart';
-import 'package:project_week8/screens/splash.dart';
+import 'package:project_week8/screens/splash_screen.dart';
 
 
 const SAVE_KEY_NAME='userLoggedIn';
@@ -16,13 +16,15 @@ Future<void> main()async{
    if(!Hive.isAdapterRegistered(BookModelAdapter().typeId)){
     Hive.registerAdapter(BookModelAdapter());
   }
+
   if(!Hive.isAdapterRegistered(ProductModelAdapter().typeId)){
     Hive.registerAdapter(ProductModelAdapter());
   }
+
   if(!Hive.isAdapterRegistered(SellProductModelAdapter().typeId)){
     Hive.registerAdapter(SellProductModelAdapter());
   }
-  runApp(Myapp());
+  runApp(const Myapp());
 }
 
 

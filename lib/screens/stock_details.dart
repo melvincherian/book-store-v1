@@ -10,7 +10,7 @@ class Stock extends StatelessWidget {
           title:const Text('Stock Details'),
           centerTitle: true,
       ),
-      
+    
     );
   }
 }

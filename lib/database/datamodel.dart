@@ -66,13 +66,23 @@ class ProductModel {
 
   @HiveField(4)
   final String count;
+  
+  @HiveField(5)
+  int? id;
 
-  ProductModel(
-      {required this.bookname,
-      required this.authorname,
-      required this.price,
-      required this.volume,
-      required this.count});
+  @HiveField(6)
+  final String categoryName;
+
+  ProductModel({
+    required this.bookname,
+    required this.authorname,
+    required this.price,
+    required this.volume,
+    required this.count,
+    required this.id,
+    required this.categoryName,
+
+  });
 }
 
 @HiveType(typeId: 5)
@@ -92,10 +102,15 @@ class SellProductModel {
   @HiveField(4)
   final String price;
 
-  SellProductModel(
-      {required this.name,
-      required this.phonenumber,
-      required this.product,
-      required this.discount,
-      required this.price});
+  @HiveField(5)
+  int? id;
+
+  SellProductModel({
+    required this.name,
+    required this.phonenumber,
+    required this.product,
+    required this.discount,
+    required this.price,
+    required this.id,
+  });
 }

@@ -1,5 +1,8 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'package:project_week8/screens/profile.dart';
+import 'package:project_week8/screens/Profile_Page.dart';
+
 
 class ScreenPrivacy extends StatelessWidget {
   const ScreenPrivacy({super.key});

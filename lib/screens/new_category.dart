@@ -1,9 +1,11 @@
+// ignore_for_file: prefer_const_constructors, deprecated_member_use
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
-import 'package:project_week8/screens/categories.dart';
+import 'package:project_week8/screens/Category_Screen.dart';
 
 class NewCategory extends StatefulWidget {
   final CategoryModel? category;
@@ -29,10 +31,10 @@ class _NewCategoryState extends State<NewCategory> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 242, 240, 240),
-        title: const Text(
+        backgroundColor: Colors.white, // Update with your preferred color
+        title: Text(
           'Add Category',
-          style: TextStyle(fontSize: 30, color: Colors.black),
+          style: TextStyle(fontSize: 29, color: Colors.black), // Adjust font size and color
         ),
         leading: IconButton(
           onPressed: () {
@@ -43,9 +45,9 @@ class _NewCategoryState extends State<NewCategory> {
               ),
             );
           },
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Colors.black, // Change icon color
           ),
         ),
         centerTitle: true,
@@ -55,46 +57,82 @@ class _NewCategoryState extends State<NewCategory> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
               GestureDetector(
                 onTap: getImage,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: Stack(
+                  alignment: Alignment.center,
                   children: [
-                    const SizedBox(width: 160),
-                    CircleAvatar(
-                      backgroundImage: image != null ? FileImage(image!) : null,
-                      radius: 50,
-                      child: image == null
-                          ? Image.asset(
-                              'assets/images/addimage.jpg',
-                              fit: BoxFit.cover,
+                    Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200], // Placeholder color
+                        borderRadius: BorderRadius.circular(60),
+                      ),
+                      child: image != null
+                          ? ClipRRect(
+                              borderRadius: BorderRadius.circular(60),
+                              child: Image.file(
+                                image!,
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                              ),
                             )
-                          : null,
+                          : Icon(
+                              Icons.add_photo_alternate,
+                              size: 50,
+                              color: Colors.grey[600],
+                            ),
                     ),
+                    if (image != null)
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: Colors.blue, // Change button color
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              SizedBox(height: 40),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     labelText: 'Category Name',
-                    // border: OutlineInputBorder(
-                    //   borderRadius: BorderRadius.circular(30),
-                    // ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 20),
               ElevatedButton(
-                onPressed: () {
-                  saveImage();
-                },
-                child: const Text('Add'),
+                onPressed: saveImage,
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.blue, // Change button color
+                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  'Add',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
             ],
           ),
@@ -117,11 +155,11 @@ class _NewCategoryState extends State<NewCategory> {
     if (image != null) {
       if (nameController.text.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.red,
             content: Text(
               'Please enter a category name',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(color: Colors.white),
             ),
           ),
         );
@@ -129,11 +167,11 @@ class _NewCategoryState extends State<NewCategory> {
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.green,
           content: Text(
-            'category added successfully',
-            style: TextStyle(color: Colors.black),
+            'Category added successfully',
+            style: TextStyle(color: Colors.white),
           ),
         ),
       );
@@ -148,11 +186,11 @@ class _NewCategoryState extends State<NewCategory> {
       // saveData(categoryModel);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.red,
           content: Text(
             'Please select an image!',
-            style: TextStyle(color: Colors.black),
+            style: TextStyle(color: Colors.white),
           ),
         ),
       );

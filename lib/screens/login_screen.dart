@@ -1,10 +1,12 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/main.dart';
 import 'package:project_week8/functions/db_functions.dart';
-import 'package:project_week8/screens/home.dart';
-import 'package:project_week8/screens/signup.dart';
+import 'package:project_week8/screens/Home_Screen.dart';
+import 'package:project_week8/screens/signup_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ScreenLogin extends StatefulWidget {
@@ -116,6 +118,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   if (_formKey.currentState!.validate()) {
                     checkLogin(context);
                   } else {
+                    // ignore: avoid_print
                     print('Data is empty or invalid');
                   }
                 },
@@ -181,6 +184,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
     bool isValidUser = false;
     for (var user in users) {
       if (user.email == email && user.password == password) {
+        // ignore: avoid_print
         print('success');
         isValidUser = true;
         break;
@@ -188,10 +192,13 @@ class _ScreenLoginState extends State<ScreenLogin> {
     }
 
     if (isValidUser) {
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const ScreenHome()));
     } else {
+      // ignore: prefer_const_declarations
       final errorMessage = 'Invalid email or password';
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         behavior: SnackBarBehavior.floating,
         backgroundColor: Colors.red,

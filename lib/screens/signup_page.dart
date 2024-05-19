@@ -1,7 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
-import 'package:project_week8/screens/login.dart';
+import 'package:project_week8/screens/Login_Screen.dart';
+
 
 class ScreenLogout extends StatefulWidget {
   const ScreenLogout({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class _ScreenLogoutState extends State<ScreenLogout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 243, 247, 250),
+      backgroundColor:const Color.fromARGB(255, 243, 247, 250),
       body: SingleChildScrollView(
         child: Center(
           child: Column(

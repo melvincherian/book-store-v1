@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -113,7 +115,7 @@ class _EditCategoryState extends State<EditCategory> {
                         style: TextStyle(color: Colors.black),
                       ),
                     ));
-
+                       
                     // Pass back the updated image path to the previous screen
                     // ignore: use_build_context_synchronously
                     Navigator.pop(context, image!.path);
