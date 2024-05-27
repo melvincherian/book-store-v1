@@ -1,3 +1,6 @@
+// ignore_for_file: unused_import
+
+import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 part 'datamodel.g.dart';
 
@@ -72,6 +75,8 @@ class ProductModel {
 
   @HiveField(6)
   final String categoryName;
+  
+
 
   ProductModel({
     required this.bookname,
@@ -79,10 +84,15 @@ class ProductModel {
     required this.price,
     required this.volume,
     required this.count,
-    required this.id,
+     this.id,
     required this.categoryName,
+  
+   
+   
 
   });
+
+
 }
 
 @HiveType(typeId: 5)
@@ -103,7 +113,10 @@ class SellProductModel {
   final String price;
 
   @HiveField(5)
-  int? id;
+   int id;
+  
+  @HiveField(6)
+  final int quantity;
 
   SellProductModel({
     required this.name,
@@ -111,6 +124,9 @@ class SellProductModel {
     required this.product,
     required this.discount,
     required this.price,
-    required this.id,
-  });
+    // required this.id,  
+    required this.quantity,
+    int?id
+    
+  }): id = id ?? DateTime.now().millisecondsSinceEpoch;
 }

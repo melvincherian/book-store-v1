@@ -197,6 +197,7 @@ class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
       product: fields[2] as String,
       discount: fields[3] as String,
       price: fields[4] as String,
+      quantity: fields[6] as int,
       id: fields[5] as int?,
     );
   }
@@ -204,7 +205,7 @@ class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
   @override
   void write(BinaryWriter writer, SellProductModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(7)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -216,7 +217,9 @@ class SellProductModelAdapter extends TypeAdapter<SellProductModel> {
       ..writeByte(4)
       ..write(obj.price)
       ..writeByte(5)
-      ..write(obj.id);
+      ..write(obj.id)
+      ..writeByte(6)
+      ..write(obj.quantity);
   }
 
   @override

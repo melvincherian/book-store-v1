@@ -11,16 +11,31 @@ class ScreenSplash extends StatefulWidget {
   State<ScreenSplash> createState() => _ScreenSplashState();
 }
 
-class _ScreenSplashState extends State<ScreenSplash> {
+class _ScreenSplashState extends State<ScreenSplash> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   @override
   void initState() {
-    checkSharedpreference();
     super.initState();
+    _controller = AnimationController(
+      duration: const Duration(seconds: 3),
+      vsync: this,
+    );
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller)
+      ..addListener(() {
+        setState(() {});
+      });
+
+    _controller.forward();
+    checkSharedpreference();
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
@@ -29,7 +44,7 @@ class _ScreenSplashState extends State<ScreenSplash> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF00B4DB), Color.fromARGB(255, 42, 126, 0)], // Example gradient colors
+            colors: [Color(0xFF00B4DB), Color.fromARGB(255, 214, 239, 202)], // Example gradient colors
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -38,22 +53,28 @@ class _ScreenSplashState extends State<ScreenSplash> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              ClipOval(
-                child: Image.asset(
-                  'assets/images/b238018c0a4861898f3f44f78ce3eb2c.jpg',
-                  height: 180,
-                  width: 180,
-                  fit: BoxFit.cover, // Ensure the image fits within the circle
+              Opacity(
+                opacity: _animation.value,
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/b238018c0a4861898f3f44f78ce3eb2c.jpg',
+                    height: 180,
+                    width: 180,
+                    fit: BoxFit.cover, // Ensure the image fits within the circle
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                'BOOKHUB',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                  fontFamily: 'Roboto', // Change to your preferred font
+              Opacity(
+                opacity: _animation.value,
+                child: const Text(
+                  'BOOKHUB',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontFamily: 'Roboto', // Change to your preferred font
+                  ),
                 ),
               ),
             ],

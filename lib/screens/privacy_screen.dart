@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_week8/screens/Profile_Page.dart';
 
-
 class ScreenPrivacy extends StatelessWidget {
   const ScreenPrivacy({super.key});
 

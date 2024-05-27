@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
 import 'package:project_week8/database/datamodel.dart';
@@ -7,7 +7,7 @@ import 'package:project_week8/screens/Home_Screen.dart';
 import 'package:project_week8/screens/selldetail_screen.dart';
 
 class SellDetails extends StatefulWidget {
-  const SellDetails({Key? key}) : super(key: key);
+  const SellDetails({Key? key, required SellProductModel}) : super(key: key);
 
   @override
   State<SellDetails> createState() => _SellDetailsState();
@@ -21,12 +21,9 @@ class _SellDetailsState extends State<SellDetails> {
   }
 
   // ignore: unused_element
-  Future<void> _deleteSellProduct(int id) async {
-    await deleteSellproduct(id); // Calling your delete function from db_functions.dart
-    // No need to call setState() here, because sell.notifyListeners() in deleteSellProduct will update the UI.
-  }
-
-  void _showDeleteConfirmationDialog(BuildContext context, SellProductModel sellProduct) {
+  
+  void _showDeleteConfirmationDialog(
+      BuildContext context, SellProductModel sellProduct) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -42,9 +39,12 @@ class _SellDetailsState extends State<SellDetails> {
             ),
             TextButton(
               child: const Text('Delete'),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).pop();
-                // deleteSellProduct(sellProduct.id);
+
+                  await deleteSellProduct(sellProduct.id);
+               
+               
               },
             ),
           ],
@@ -58,12 +58,17 @@ class _SellDetailsState extends State<SellDetails> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.teal,
-        title: const Text('Sell Details',
-        style: TextStyle(fontSize: 28,fontWeight: FontWeight.bold,color: Colors.black),
+        title: const Text(
+          'Sell Details',
+          style: TextStyle(
+              fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back,color: Colors.black,),
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
           onPressed: () {
             Navigator.push(
               context,
@@ -75,7 +80,8 @@ class _SellDetailsState extends State<SellDetails> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ValueListenableBuilder<List<SellProductModel>>(
-          valueListenable: sell, // Assuming sell is a ValueNotifier containing the list of sell products
+          valueListenable:
+              sell, // Assuming sell is a ValueNotifier containing the list of sell products
           builder: (context, sellProducts, _) {
             if (sellProducts.isNotEmpty) {
               return ListView.builder(
@@ -88,12 +94,12 @@ class _SellDetailsState extends State<SellDetails> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => SellDetailScreen(sellProduct: sellProduct),
+                          builder: (context) =>
+                              SellDetailScreen(sellProduct: sellProduct),
                         ),
                       );
                     },
                     onLongPress: () {
-                    
                       _showDeleteConfirmationDialog(context, sellProduct);
                     },
                     child: Card(
@@ -109,7 +115,8 @@ class _SellDetailsState extends State<SellDetails> {
                           children: [
                             Text(
                               'Name: ${sellProduct.name}',
-                              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(height: 8.0),
                             Text(
@@ -119,7 +126,8 @@ class _SellDetailsState extends State<SellDetails> {
                             const SizedBox(height: 8.0),
                             Text(
                               'Price: \$${sellProduct.price.toString()}',
-                              style: const TextStyle(fontSize: 16, color: Colors.green),
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.green),
                             ),
                           ],
                         ),

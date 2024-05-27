@@ -50,7 +50,7 @@ class _EditCategoryState extends State<EditCategory> {
                     const Text(
                       'Edit Category',
                       style: TextStyle(
-                          fontSize: 38,
+                          fontSize: 39,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),

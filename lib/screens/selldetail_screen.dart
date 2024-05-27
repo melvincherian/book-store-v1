@@ -8,9 +8,8 @@ import 'package:project_week8/functions/db_functions.dart';
 class SellDetailScreen extends StatelessWidget {
   final SellProductModel sellProduct;
 
-  const SellDetailScreen({Key? key, required this.sellProduct}) : super(key: key);
-
-
+  const SellDetailScreen({Key? key, required this.sellProduct})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +59,12 @@ class SellDetailScreen extends StatelessWidget {
                       label: 'Price:',
                       value: '\$${sellProduct.price.toString()}',
                     ),
+                    const Divider(),
+                    _buildInfoItem(
+                      label: 'Quantity:',
+                      value: '\$${sellProduct.quantity.toString()}',
+                    ),
+                    const Divider(),
                     const SizedBox(height: 20.0),
                     _buildInfoItem(
                       label: 'Date:',
@@ -125,7 +130,8 @@ class SellDetailScreen extends StatelessWidget {
             TextButton(
               child: const Text('Delete'),
               onPressed: () async {
-                // await deleteSellproduct(sellProduct.id);
+                // deleteSellproduct(sellProduct.id);
+
                 Navigator.of(context).pop();
                 Navigator.of(context).pop(); // Close the detail screen
               },
@@ -136,7 +142,7 @@ class SellDetailScreen extends StatelessWidget {
     );
   }
 
-  Future<void> deleteSellproduct(int id) async {
+  Future<void> deleteSellproduct(int? id) async {
     final sellDB = await Hive.openBox<SellProductModel>('sell value');
     await sellDB.delete(id);
     sell.value.removeWhere((element) => element.id == id);

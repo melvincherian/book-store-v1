@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, deprecated_member_use
+// ignore_for_file: prefer_const_constructors, deprecated_member_use, file_names
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -34,7 +34,10 @@ class _NewCategoryState extends State<NewCategory> {
         backgroundColor: Colors.white, // Update with your preferred color
         title: Text(
           'Add Category',
-          style: TextStyle(fontSize: 29, color: Colors.black), // Adjust font size and color
+          style: TextStyle(
+              fontSize: 29,
+              color: Colors.black,
+              fontWeight: FontWeight.bold), // Adjust font size and color
         ),
         leading: IconButton(
           onPressed: () {
@@ -123,7 +126,7 @@ class _NewCategoryState extends State<NewCategory> {
               ElevatedButton(
                 onPressed: saveImage,
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue, // Change button color
+                  backgroundColor: Colors.blue,
                   padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
@@ -131,7 +134,7 @@ class _NewCategoryState extends State<NewCategory> {
                 ),
                 child: Text(
                   'Add',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18, color: Colors.white),
                 ),
               ),
             ],
@@ -193,7 +196,4 @@ class _NewCategoryState extends State<NewCategory> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-      );
-    }
-  }
-}
+      );}}}

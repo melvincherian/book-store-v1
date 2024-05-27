@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, sort_child_properties_last, non_constant_identifier_names, unnecessary_import, avoid_types_as_parameter_names
+// ignore_for_file: use_build_context_synchronously, sort_child_properties_last, non_constant_identifier_names, unnecessary_import, avoid_types_as_parameter_names, file_names
 
 import 'dart:io';
 import 'package:flutter/foundation.dart';
@@ -139,7 +139,7 @@ class _MyCategoriesState extends State<MyCategories> {
                                   if (category.image.isNotEmpty &&
                                       File(category.image).existsSync())
                                     ClipRRect(
-                                      borderRadius: BorderRadius.circular(10),
+                                      borderRadius: BorderRadius.circular(5),
                                       child: Image.file(
                                         File(category.image),
                                         fit: BoxFit.cover,
@@ -151,7 +151,8 @@ class _MyCategoriesState extends State<MyCategories> {
                                     right: 0,
                                     child: Container(
                                       padding: const EdgeInsets.all(8),
-                                      color: Colors.black54,
+                                     
+                                      color: const Color.fromARGB(255, 17, 17, 17),
                                       child: Text(
                                         category.name,
                                         textAlign: TextAlign.center,
@@ -168,8 +169,10 @@ class _MyCategoriesState extends State<MyCategories> {
                                     right: 8,
                                     child: PopupMenuButton(
                                       color: Colors.white,
+                                      icon:const Icon(Icons.more_vert,color: Colors.white,),
                                       itemBuilder: (context) => [
                                         const PopupMenuItem(
+                                          
                                           value: 'edit',
                                           child: Text('Edit'),
                                         ),
@@ -187,6 +190,7 @@ class _MyCategoriesState extends State<MyCategories> {
                                         }
                                       },
                                     ),
+                                    
                                   ),
                                 ],
                               ),

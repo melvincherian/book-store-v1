@@ -1,10 +1,14 @@
-// ignore_for_file: file_names
+// ignore_for_file: unused_import, file_names
 
-import 'dart:math'; // Import dart:math for random number generation
+import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
 import 'package:project_week8/screens/sell_details.dart';
+import 'package:project_week8/widgets/custom_text_form_field.dart';
+
+import '../structurecodes/sellproductfield.dart';
 
 class SellProduct extends StatefulWidget {
   const SellProduct({Key? key}) : super(key: key);
@@ -18,13 +22,21 @@ class _SellProductState extends State<SellProduct> {
   final TextEditingController phoneController = TextEditingController();
   final TextEditingController discountController = TextEditingController();
   final TextEditingController priceController = TextEditingController();
+  final TextEditingController quantityController = TextEditingController();
 
-  String? selectedProduct;
+  List<String>? selectedProducts;
 
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
-  List<String> products = ['Product A', 'Product B', 'Product C', 'Product D'];
+  final List<String> products = [
+    'HarryPotter',
+    'AtomicHabits',
+    'Darkness',
+    'Ice age',
+    'Fist of fury',
+    'End game',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,42 +60,27 @@ class _SellProductState extends State<SellProduct> {
                 ),
               ),
               const SizedBox(height: 20.0),
-              TextFormField(
+              CustomTextFormField(
                 controller: nameController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  labelText: 'Name',
-                  hintText: 'Name',
-                ),
-                onChanged: (_) {
-                  if (_autovalidateMode == AutovalidateMode.always) {
-                    _formKey.currentState!.validate();
-                  }
-                },
+                labelText: 'Name',
+                hintText: 'Name',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your name';
                   }
                   return null;
                 },
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                controller: phoneController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  labelText: 'Phone Number',
-                  hintText: 'Phone Number',
-                ),
                 onChanged: (_) {
                   if (_autovalidateMode == AutovalidateMode.always) {
                     _formKey.currentState!.validate();
                   }
                 },
+              ),
+              const SizedBox(height: 20.0),
+              CustomTextFormField(
+                controller: phoneController,
+                labelText: 'Phone Number',
+                hintText: 'Phone Number',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter your phone number';
@@ -93,80 +90,73 @@ class _SellProductState extends State<SellProduct> {
                   return null;
                 },
                 keyboardType: TextInputType.phone,
+                onChanged: (_) {
+                  if (_autovalidateMode == AutovalidateMode.always) {
+                    _formKey.currentState!.validate();
+                  }
+                },
               ),
               const SizedBox(height: 20.0),
-              Row(
-                children: [
-                  Expanded(
-                    child: DropdownButtonFormField<String>(
-                      value: selectedProduct,
-                      onChanged: (value) {
-                        setState(() {
-                          selectedProduct = value;
-                          _updatePriceWithDiscount();
-                        });
-                      },
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        labelText: 'Choose Product',
-                      ),
-                      items: products.map((String product) {
-                        return DropdownMenuItem<String>(
-                          value: product,
-                          child: Text(product),
-                        );
-                      }).toList(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please choose a product';
-                        }
-                        return null;
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20.0),
-              TextFormField(
-                controller: discountController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  labelText: 'Discount',
-                  hintText: 'Discount',
+              MultiSelectDialogField(
+                items: products
+                    .map((product) => MultiSelectItem<String>(product, product))
+                    .toList(),
+                title: const Text("Products"),
+                selectedColor: Colors.blue,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(15),
                 ),
+                buttonIcon: const Icon(
+                  Icons.arrow_drop_down,
+                  color: Color.fromARGB(255, 79, 79, 79),
+                ),
+                buttonText: const Text(
+                  "Choose Products",
+                  style: TextStyle(color: Color.fromARGB(255, 60, 60, 60)),
+                ),
+                onConfirm: (results) {
+                  setState(() {
+                    selectedProducts = results.cast<String>();
+                    _updatePriceWithDiscount();
+                  });
+                },
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please choose at least one product';
+                  }
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20.0),
+              CustomTextFormField(
+                controller: discountController,
+                labelText: 'Discount',
+                hintText: 'Discount',
+                validator: (value) {
+                  if (value != null &&
+                      value.isNotEmpty &&
+                      (double.tryParse(value) == null ||
+                          double.parse(value) < 0 ||
+                          double.parse(value) > 100)) {
+                    return 'Please enter a valid discount percentage (0-100)';
+                  }
+                  return null;
+                },
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
                 onChanged: (_) {
                   if (_autovalidateMode == AutovalidateMode.always) {
                     _formKey.currentState!.validate();
                   }
                   _updatePriceWithDiscount();
                 },
-                validator: (value) {
-                  if (value != null && value.isNotEmpty && (double.tryParse(value) == null || double.parse(value) < 0 || double.parse(value) > 100)) {
-                    return 'Please enter a valid discount percentage (0-100)';
-                  }
-                  return null;
-                },
-                keyboardType:const TextInputType.numberWithOptions(decimal: true),
               ),
               const SizedBox(height: 20.0),
-              TextFormField(
+              CustomTextFormField(
                 controller: priceController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  labelText: 'Price',
-                  hintText: 'Price',
-                ),
-                onChanged: (_) {
-                  if (_autovalidateMode == AutovalidateMode.always) {
-                    _formKey.currentState!.validate();
-                  }
-                },
+                labelText: 'Price',
+                hintText: 'Price',
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the price';
@@ -175,7 +165,34 @@ class _SellProductState extends State<SellProduct> {
                   }
                   return null;
                 },
-                keyboardType:const TextInputType.numberWithOptions(decimal: true),
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) {
+                  if (_autovalidateMode == AutovalidateMode.always) {
+                    _formKey.currentState!.validate();
+                  }
+                },
+              ),
+              const SizedBox(height: 20.0),
+              CustomTextFormField(
+                controller: quantityController,
+                labelText: 'Quantity',
+                hintText: 'Quantity',
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the quantity';
+                  } else if (int.tryParse(value) == null || int.parse(value) <= 0) {
+                    return 'Please enter a valid quantity';
+                  }
+                  return null;
+                },
+                keyboardType:
+                    const TextInputType.numberWithOptions(decimal: true),
+                onChanged: (_) {
+                  if (_autovalidateMode == AutovalidateMode.always) {
+                    _formKey.currentState!.validate();
+                  }
+                },
               ),
               const SizedBox(height: 40),
               ElevatedButton(
@@ -186,21 +203,27 @@ class _SellProductState extends State<SellProduct> {
                   if (_formKey.currentState!.validate()) {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => const SellDetails()),
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              const SellDetails(SellProductModel: null)),
                     );
                     final sellProduct = SellProductModel(
                       name: nameController.text,
                       phonenumber: phoneController.text,
-                      product: selectedProduct!,
+                      product: selectedProducts!.join(', '),
                       discount: discountController.text,
                       price: priceController.text,
-                      id: null,
+                      quantity: int.parse(quantityController.text),
                     );
                     addSellproduct(sellProduct);
                   }
                 },
-                child: const Text('Sell'),
-              )
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                child: const Text(
+                  'Sell',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
             ],
           ),
         ),
@@ -209,7 +232,7 @@ class _SellProductState extends State<SellProduct> {
   }
 
   void _updatePriceWithDiscount() {
-    if (selectedProduct != null) {
+    if (selectedProducts != null && selectedProducts!.isNotEmpty) {
       Random random = Random();
       double randomPrice = 50 + random.nextInt(450) + random.nextDouble();
       double discount = 0;

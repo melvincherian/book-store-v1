@@ -53,13 +53,15 @@ class _ScreenHomeState extends State<ScreenHome> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-      const    SliverAppBar(
+          const SliverAppBar(
             centerTitle: true,
             automaticallyImplyLeading: false,
-            title:  Text(
+            title: Text(
               'Home',
               style: TextStyle(
                 fontSize: 28,
@@ -89,6 +91,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                             onTap: () {
                               // Add navigation here if needed
                             },
+                            width: screenSize.width * 0.42,
                           ),
                           _buildFeatureCard(
                             title: 'Product Updates',
@@ -102,6 +105,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                                 ),
                               );
                             },
+                            width: screenSize.width * 0.42,
                           ),
                         ],
                       ),
@@ -117,10 +121,11 @@ class _ScreenHomeState extends State<ScreenHome> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) =>const  ScreenProfit(),
+                                  builder: (context) => const ScreenProfit(SellProductModel: null),
                                 ),
                               );
                             },
+                            width: screenSize.width * 0.42,
                           ),
                           _buildFeatureCard(
                             title: 'Sell Details',
@@ -130,10 +135,11 @@ class _ScreenHomeState extends State<ScreenHome> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => const SellDetails(),
+                                  builder: (context) => const SellDetails(SellProductModel: null),
                                 ),
                               );
                             },
+                            width: screenSize.width * 0.42,
                           ),
                         ],
                       ),
@@ -179,6 +185,7 @@ class _ScreenHomeState extends State<ScreenHome> {
     required Color color,
     required IconData icon,
     required VoidCallback onTap,
+    required double width,
   }) {
     return GestureDetector(
       onTap: onTap,
@@ -189,7 +196,7 @@ class _ScreenHomeState extends State<ScreenHome> {
         ),
         child: Container(
           height: 150,
-          width: 170,
+          width: width,
           decoration: BoxDecoration(
             color: color,
             borderRadius: BorderRadius.circular(12),
@@ -203,9 +210,9 @@ class _ScreenHomeState extends State<ScreenHome> {
                 Text(
                   title,
                   style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black87,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -216,7 +223,8 @@ class _ScreenHomeState extends State<ScreenHome> {
       ),
     );
   }
-  signout(BuildContext context) async {
+
+  void signout(BuildContext context) async {
     final sharedprefs = await SharedPreferences.getInstance();
     await sharedprefs.clear();
     // ignore: use_build_context_synchronously

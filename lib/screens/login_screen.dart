@@ -1,4 +1,4 @@
-// ignore_for_file: file_names
+// ignore_for_file: file_names, deprecated_member_use
 
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -31,7 +31,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(255, 249, 249, 249),
+      backgroundColor: const Color.fromARGB(255, 249, 249, 249),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -63,9 +63,8 @@ class _ScreenLoginState extends State<ScreenLogin> {
                           ),
                           labelText: 'Email',
                           hintText: 'Email',
-                          
                         ),
-                         onChanged: (_) => _formKey.currentState!.validate(),
+                        onChanged: (_) => _formKey.currentState!.validate(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Email is required';
@@ -123,6 +122,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                   }
                 },
                 style: ButtonStyle(
+                 backgroundColor: MaterialStateProperty.all<Color>(Colors.blue),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(23),
@@ -132,17 +132,19 @@ class _ScreenLoginState extends State<ScreenLogin> {
                     const Size(200, 50),
                   ),
                 ),
-                child: const Text('Login'),
+                child: const Text('Login',
+                style: TextStyle(color: Colors.black),
+                ),
               ),
               const SizedBox(height: 15),
-              TextButton(
-                  onPressed: () {
-                    // Navigator.push(
-                    //     context,
-                    //     MaterialPageRoute(
-                    //         builder: (context) => ForgotPassword()));
-                  },
-                  child: const Text('Forgot Password?')),
+              // TextButton(
+              //     onPressed: () {
+              //       // Navigator.push(
+              //       //     context,
+              //       //     MaterialPageRoute(
+              //       //         builder: (context) => ForgotPassword()));
+              //     },
+              //     child: const Text('Forgot Password?')),
               const SizedBox(height: 40),
               const Text('Don\'t have an account?'),
               TextButton(

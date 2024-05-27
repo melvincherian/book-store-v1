@@ -13,7 +13,7 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
   List<FavoriteItem> favoriteItems = [
     FavoriteItem('Heart of Darkness', 'JOSEPH CONRAD'),
     FavoriteItem('Harry Potter', 'JK ROWLING'),
-    FavoriteItem('The Darkness', 'James Clear')
+    FavoriteItem('Atomic Habits', 'JAMES CLEAR')
   ];
 
   @override
@@ -23,7 +23,7 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
         flexibleSpace: Container(
           decoration: const BoxDecoration(
             gradient: LinearGradient(
-              colors: [Colors.teal, Colors.greenAccent],
+              colors: [Colors.teal, Colors.teal],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -48,6 +48,7 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
 
   Widget _buildFavoriteItem(FavoriteItem item) {
     return Card(
+        color: Colors.grey,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
       ),
@@ -72,7 +73,7 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
             const SizedBox(height: 4),
             Text(
               item.author,
-              style: const TextStyle(color: Colors.grey, fontSize: 14),
+              style: const TextStyle(color: Color.fromARGB(255, 32, 30, 30), fontSize: 14),
             ),
           ],
         ),
@@ -89,7 +90,7 @@ class _ScreenFavouriteState extends State<ScreenFavourite> {
             IconButton(
               icon: const Icon(
                 Icons.delete,
-                color: Colors.grey,
+                color: Colors.black,
               ),
               onPressed: () {
                 _deleteFavoriteItem(item);

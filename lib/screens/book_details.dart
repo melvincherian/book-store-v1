@@ -26,6 +26,7 @@ class DetailsPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Card(
+            
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -42,8 +43,8 @@ class DetailsPage extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.file(
                           details['image'],
-                          width: 120,
-                          height: 120,
+                          width: 130,
+                          height: 130,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -70,6 +71,10 @@ class DetailsPage extends StatelessWidget {
                     label: 'Count:',
                     value: '${details['count']}',
                   ),
+                  //  DetailItem(
+                  //   label: 'Category name:',
+                  //   value: '${details['Category name']}',
+                  // ),
                 ],
               ),
             ),
@@ -100,7 +105,7 @@ class DetailItem extends StatelessWidget {
           Text(
             label,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.blueGrey,
             ),

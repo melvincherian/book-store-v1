@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, use_key_in_widget_constructors
+// ignore_for_file: unused_local_variable, use_key_in_widget_constructors, file_names
 
 import 'package:flutter/material.dart';
 import 'package:project_week8/screens/About_Screen.dart';
@@ -14,6 +14,9 @@ class ScreenProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isPortrait = screenSize.height > screenSize.width;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F6),
       appBar: AppBar(
@@ -22,7 +25,10 @@ class ScreenProfile extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'Profile',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         leading: IconButton(
           onPressed: () {
@@ -49,17 +55,17 @@ class ScreenProfile extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(screenSize.width * 0.04),
         child: Column(
           children: [
-        const    SizedBox(height: 40),
-            const CircleAvatar(
-              radius: 80,
-              backgroundImage: AssetImage(
+            SizedBox(height: screenSize.height * 0.05),
+            CircleAvatar(
+              radius: screenSize.width * 0.2,
+              backgroundImage: const AssetImage(
                 'assets/images/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
               ),
             ),
-            const SizedBox(height: 16),
+            SizedBox(height: screenSize.height * 0.02),
             const Text(
               'Melvin Cherian',
               style: TextStyle(
@@ -68,13 +74,12 @@ class ScreenProfile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            SizedBox(height: screenSize.height * 0.02),
             SizedBox(
-              width: 250,
-              // width: double.infinity,
+              width: screenSize.width * 0.6,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
@@ -86,16 +91,16 @@ class ScreenProfile extends StatelessWidget {
                         builder: (context) => const EditProfile()),
                   );
                 },
-                child: const Text('Edit Profile'),
+                child: const Text(
+                  'Edit Profile',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
-            const SizedBox(height: 50),
-            ListTile(
-              leading: const Icon(Icons.shop, color: Colors.black),
-              title: const Text(
-                'Sell Products',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
+            SizedBox(height: screenSize.height * 0.05),
+            _buildListTile(
+              icon: Icons.shop,
+              title: 'Sell Products',
               onTap: () {
                 Navigator.push(
                   context,
@@ -103,12 +108,9 @@ class ScreenProfile extends StatelessWidget {
                 );
               },
             ),
-            ListTile(
-              leading: const Icon(Icons.security, color: Colors.black),
-              title: const Text(
-                'Privacy Policy',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
+            _buildListTile(
+              icon: Icons.security,
+              title: 'Privacy Policy',
               onTap: () {
                 Navigator.push(
                   context,
@@ -117,9 +119,49 @@ class ScreenProfile extends StatelessWidget {
                 );
               },
             ),
+            _buildListTile(
+              icon: Icons.policy,
+              title: 'Terms of Services',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ScreenTerms()),
+                );
+              },
+            ),
+            _buildListTile(
+              icon: Icons.info,
+              title: 'About',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const AboutScreen()),
+                );
+              },
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  ListTile _buildListTile(
+      {required IconData icon, required String title, required Function() onTap}) {
+    return ListTile(
+      leading: Icon(
+        icon,
+        color: Colors.blue,
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 18,
+          color: Colors.black,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      trailing: const Icon(Icons.arrow_forward_ios, color: Colors.black),
+      onTap: onTap,
     );
   }
 }
@@ -129,21 +171,14 @@ class SettingsOverlayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isPortrait = screenSize.height > screenSize.width;
+
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.black),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
       backgroundColor: Colors.black.withOpacity(0.5),
       body: Center(
         child: Container(
-          padding: const EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(screenSize.width * 0.05),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -155,60 +190,36 @@ class SettingsOverlayScreen extends StatelessWidget {
                 onPressed: () {
                   _showLogoutConfirmation(context);
                 },
-                icon: const Icon(Icons.logout),
-                label: const Text('Log out'),
+                icon: const Icon(
+                  Icons.logout,
+                  color: Colors.black,
+                ),
+                label: const Text(
+                  'Log out',
+                  style: TextStyle(color: Colors.black),
+                ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.red,
+                  backgroundColor: Colors.red,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const ScreenTerms()),
-                  );
-                },
-                icon: const Icon(Icons.policy),
-                label: const Text('Terms of Service'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AboutScreen()),
-                  );
-                },
-                icon: const Icon(Icons.info),
-                label: const Text('About'),
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenSize.height * 0.02),
               ElevatedButton.icon(
                 onPressed: () {
                   // Implement share functionality
                 },
-                icon: const Icon(Icons.share),
-                label: const Text('Share App'),
+                icon: const Icon(
+                  Icons.share,
+                  color: Colors.black,
+                ),
+                label: const Text(
+                  'Share App',
+                  style: TextStyle(color: Colors.black),
+                ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.blue,
+                  backgroundColor: Colors.blue,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),

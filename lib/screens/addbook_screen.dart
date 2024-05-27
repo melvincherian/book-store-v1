@@ -1,14 +1,15 @@
-// ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
+// ignore_for_file: unused_import, library_private_types_in_public_api, use_build_context_synchronously, avoid_print, file_names
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
+import 'package:project_week8/structurecodes/addbooktextfield.dart';
+import 'package:project_week8/widgets/custom_text_form_field.dart'; // Import the custom widget
 
 class AddBookPage extends StatefulWidget {
-  final List<String> addedCategoryNames; // Added category names parameter
+  final List<String> addedCategoryNames;
 
   const AddBookPage({Key? key, required this.addedCategoryNames}) : super(key: key);
 
@@ -24,6 +25,7 @@ class _AddBookPageState extends State<AddBookPage> {
   final TextEditingController _bookNameController = TextEditingController();
   final TextEditingController _countController = TextEditingController();
   final TextEditingController _selectCategory = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Future<void> _pickImage() async {
@@ -38,9 +40,16 @@ class _AddBookPageState extends State<AddBookPage> {
   }
 
   @override
+  
+  
   Widget build(BuildContext context) {
     return Scaffold(
-    
+      appBar: AppBar(
+        title: const Text('Add Book',
+        style: TextStyle(fontSize: 27,fontWeight: FontWeight.bold),
+        ),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -48,104 +57,70 @@ class _AddBookPageState extends State<AddBookPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 50),
+              const SizedBox(height: 20),
               GestureDetector(
                 onTap: _pickImage,
                 child: Container(
                   height: 200,
-                  width: 180,
                   decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(color: Colors.grey),
+                    color: Colors.grey[200],
                   ),
                   child: _image != null
-                      ? Image.file(
-                          _image!,
-                          fit: BoxFit.cover,
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child: Image.file(_image!, fit: BoxFit.cover),
                         )
-                      : const Icon(Icons.image),
+                      : const Icon(Icons.image, size: 100, color: Colors.grey),
                 ),
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              CustomTextFormField(
                 controller: _authorController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    hintText: 'Author name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter author name';
-                  }
-                  return null;
-                },
+                hintText: 'Author Name',
+                validatorMessage: 'Please enter author name',
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              CustomTextFormField(
                 controller: _priceController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    hintText: 'Price'),
+                hintText: 'Price',
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter price';
-                  }
-                  return null;
-                },
+                validatorMessage: 'Please enter price',
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              CustomTextFormField(
                 controller: _volumeController,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25)),
-                  hintText: 'Volume',
-                ),
+                hintText: 'Volume',
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter volume';
-                  }
-                  return null;
-                },
+                validatorMessage: 'Please enter volume',
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              CustomTextFormField(
                 controller: _bookNameController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    hintText: 'Book Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter book name';
-                  }
-                  return null;
-                },
+                hintText: 'Book Name',
+                validatorMessage: 'Please enter book name',
               ),
               const SizedBox(height: 20),
-              TextFormField(
+              CustomTextFormField(
                 controller: _countController,
-                decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    hintText: 'Product Count'),
+                hintText: 'Product Count',
                 keyboardType: TextInputType.number,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter Count';
-                  }
-                  return null;
-                },
+                validatorMessage: 'Please enter count',
               ),
               const SizedBox(height: 20),
               TextFormField(
                 controller: _selectCategory,
                 decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(25)),
-                    hintText: 'Select Category'),
+                  labelText: 'Select Category',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[200],
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                ),
+                readOnly: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter the category name';
@@ -153,7 +128,6 @@ class _AddBookPageState extends State<AddBookPage> {
                   return null;
                 },
                 onTap: () {
-                  // Show category names when the field is tapped
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -168,7 +142,7 @@ class _AddBookPageState extends State<AddBookPage> {
                                 setState(() {
                                   _selectCategory.text = categoryName;
                                 });
-                                Navigator.pop(context); // Close the dialog
+                                Navigator.pop(context);
                               },
                             );
                           }).toList(),
@@ -178,39 +152,50 @@ class _AddBookPageState extends State<AddBookPage> {
                   );
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
-                    final newproduct = ProductModel(
+                    final newProduct = ProductModel(
                       bookname: _bookNameController.text,
                       authorname: _authorController.text,
                       price: _priceController.text,
                       volume: _volumeController.text,
                       count: _countController.text,
                       categoryName: _selectCategory.text,
-                      id: null,
+                      id:null,
+                   
+                   
                     );
-                    await addProduct(newproduct);
 
-                    // Save book data and image
-                    Navigator.pop(context, {
-                      'image': _image,
-                      'author': _authorController.text,
-                      'price': _priceController.text,
-                      'volume': _volumeController.text,
-                      'bookName': _bookNameController.text,
-                      'count': _countController.text,
-                      'category': _selectCategory.text,
-                    });
+                    try {
+                      await addProduct(newProduct);
+
+                      Navigator.pop(context, {
+                        'image': _image,
+                        'author': _authorController.text,
+                        'price': _priceController.text,
+                        'volume': _volumeController.text,
+                        'bookName': _bookNameController.text,
+                        'count': _countController.text,
+                        'category': _selectCategory.text,
+                        
+                      });
+                    } catch (e) {
+                      print("Error saving product: $e");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Error saving product: $e')),
+                      );
+                    }
                   }
                 },
-                child: const Text('Save'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text('Save', style: TextStyle(fontSize: 16)),
+              ),],),),),);}}

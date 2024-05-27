@@ -5,7 +5,7 @@ import 'package:project_week8/screens/Profile_Page.dart';
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

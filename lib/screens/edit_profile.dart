@@ -1,12 +1,13 @@
-// ignore_for_file: file_names
+// ignore_for_file: unused_import, file_names, non_constant_identifier_names, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/adapters.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
-import 'package:project_week8/screens/Profile_Page.dart';
-
+import 'package:project_week8/screens/profile_page.dart';
+import 'package:project_week8/structurecodes/editprofiletextfield.dart';
+import 'package:project_week8/widgets/custom_text_field.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -35,15 +36,19 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final isPortrait = screenSize.height > screenSize.width;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              SizedBox(height: screenSize.height * 0.05),
               SizedBox(
-                height: 50,
+                height: screenSize.height * 0.07,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -55,21 +60,21 @@ class _EditProfileState extends State<EditProfile> {
                                   builder: (context) => const ScreenProfile()));
                         },
                         icon: const Icon(Icons.arrow_back)),
-                    const SizedBox(width: 55),
-                    const Text(
+                    SizedBox(width: screenSize.width * 0.1),
+                    Text(
                       'Edit Profile',
                       style: TextStyle(
-                          fontSize: 38,
+                          fontSize: isPortrait ? 32 : 24,
                           color: Colors.black,
                           fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: screenSize.height * 0.02),
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(width: 125),
                   GestureDetector(
                       onTap: () {
                         getImage();
@@ -77,7 +82,7 @@ class _EditProfileState extends State<EditProfile> {
                       child: CircleAvatar(
                           backgroundImage:
                               image != null ? FileImage(image!) : null,
-                          radius: 80,
+                          radius: screenSize.width * 0.2,
                           child: image == null
                               ? Image.asset(
                                   'assets/images/edit-profile-vector-icon.jpg',
@@ -92,17 +97,11 @@ class _EditProfileState extends State<EditProfile> {
                     key: _formKey,
                     child: Column(
                       children: [
-                        TextFormField(
-                          keyboardType: TextInputType.name,
+                        CustomTextField(
                           controller: usernameController,
-                          decoration: InputDecoration(
-                              contentPadding:const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              labelText: 'Username',
-                              hintText: 'Username'),
+                          labelText: 'Username',
+                          hintText: 'Username',
+                          keyboardType: TextInputType.name,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Username is required';
@@ -110,18 +109,12 @@ class _EditProfileState extends State<EditProfile> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          keyboardType: TextInputType.emailAddress,
+                        SizedBox(height: screenSize.height * 0.02),
+                        CustomTextField(
                           controller: emailController,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              labelText: 'Email',
-                              hintText: 'Email'),
+                          labelText: 'Email',
+                          hintText: 'Email',
+                          keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Email is required';
@@ -129,40 +122,28 @@ class _EditProfileState extends State<EditProfile> {
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          keyboardType: TextInputType.number,
+                        SizedBox(height: screenSize.height * 0.02),
+                        CustomTextField(
                           controller: passController,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              labelText: 'Password',
-                              hintText: 'Password'),
+                          labelText: 'Password',
+                          hintText: 'Password',
+                          keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'password is required';
+                              return 'Password is required';
                             }
                             return null;
                           },
                         ),
-                        const SizedBox(height: 20),
-                        TextFormField(
-                          keyboardType: TextInputType.text,
+                        SizedBox(height: screenSize.height * 0.02),
+                        CustomTextField(
                           controller: confirmController,
-                          decoration: InputDecoration(
-                              contentPadding: const EdgeInsets.symmetric(
-                                  vertical: 18, horizontal: 20),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(30),
-                              ),
-                              labelText: 'Confirm Password',
-                              hintText: 'Confirm Password'),
+                          labelText: 'Confirm Password',
+                          hintText: 'Confirm Password',
+                          keyboardType: TextInputType.text,
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Confirm password  required';
+                              return 'Confirm password is required';
                             }
                             return null;
                           },
@@ -170,7 +151,7 @@ class _EditProfileState extends State<EditProfile> {
                       ],
                     )),
               ),
-              const SizedBox(height: 50),
+              SizedBox(height: screenSize.height * 0.05),
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -178,8 +159,15 @@ class _EditProfileState extends State<EditProfile> {
                     }
                     saveImage();
                   },
-                  child: const Text('Update Profile')),
-              
+                  style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                      padding: EdgeInsets.symmetric(
+                          vertical: screenSize.height * 0.02,
+                          horizontal: screenSize.width * 0.2)),
+                  child: const Text(
+                    'Update Profile',
+                    style: TextStyle(color: Colors.white),
+                  )),
             ],
           ),
         ),
@@ -189,18 +177,16 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> getImage() async {
     final picker = ImagePicker();
-    // ignore: non_constant_identifier_names
     final PickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (PickedFile != null) {
       setState(() {
         image = File(PickedFile.path);
       });
     } else {
-      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.red,
           content: Text(
-            'No image selected !',
+            'No image selected!',
             style: TextStyle(color: Colors.black),
           )));
     }
@@ -218,7 +204,7 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.red,
           content: Text(
-            'No image selected !',
+            'No image selected!',
             style: TextStyle(color: Colors.black),
           )));
     }
