@@ -87,7 +87,10 @@ class _ScreenUpdateState extends State<ScreenUpdate> {
                               product.quantity < 20
                                   ? 'Out of Stock'
                                   : 'Quantity: ${product.quantity}',
-                              style: const TextStyle(fontSize: 16),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: product.quantity < 20 ? Colors.red : Colors.black,
+                              ),
                             ),
                           ),
                         );

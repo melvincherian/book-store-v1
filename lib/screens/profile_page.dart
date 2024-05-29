@@ -1,4 +1,4 @@
-// ignore_for_file: unused_local_variable, use_key_in_widget_constructors, file_names
+// ignore_for_file: use_key_in_widget_constructors, file_names
 
 import 'package:flutter/material.dart';
 import 'package:project_week8/screens/About_Screen.dart';
@@ -14,9 +14,6 @@ class ScreenProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final isPortrait = screenSize.height > screenSize.width;
-
     return Scaffold(
       backgroundColor: const Color(0xFFF6F6F6),
       appBar: AppBar(
@@ -55,17 +52,17 @@ class ScreenProfile extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(screenSize.width * 0.04),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            SizedBox(height: screenSize.height * 0.05),
-            CircleAvatar(
-              radius: screenSize.width * 0.2,
-              backgroundImage: const AssetImage(
+            const SizedBox(height: 40),
+            const CircleAvatar(
+              radius: 80,
+              backgroundImage: AssetImage(
                 'assets/images/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
               ),
             ),
-            SizedBox(height: screenSize.height * 0.02),
+            const SizedBox(height: 16),
             const Text(
               'Melvin Cherian',
               style: TextStyle(
@@ -74,9 +71,9 @@ class ScreenProfile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: screenSize.height * 0.02),
+            const SizedBox(height: 20),
             SizedBox(
-              width: screenSize.width * 0.6,
+              width: 250,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
@@ -97,7 +94,7 @@ class ScreenProfile extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: screenSize.height * 0.05),
+            const SizedBox(height: 50),
             _buildListTile(
               icon: Icons.shop,
               title: 'Sell Products',
@@ -171,14 +168,11 @@ class SettingsOverlayScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final isPortrait = screenSize.height > screenSize.width;
-
     return Scaffold(
       backgroundColor: Colors.black.withOpacity(0.5),
       body: Center(
         child: Container(
-          padding: EdgeInsets.all(screenSize.width * 0.05),
+          padding: const EdgeInsets.all(20.0),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16),
@@ -205,7 +199,7 @@ class SettingsOverlayScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: screenSize.height * 0.02),
+              const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () {
                   // Implement share functionality

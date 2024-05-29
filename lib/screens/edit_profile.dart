@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, file_names, non_constant_identifier_names, use_build_context_synchronously
+// ignore_for_file: unused_import, non_constant_identifier_names, use_build_context_synchronously, file_names
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -36,9 +36,6 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final isPortrait = screenSize.height > screenSize.width;
-
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -46,32 +43,29 @@ class _EditProfileState extends State<EditProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(height: screenSize.height * 0.05),
-              SizedBox(
-                height: screenSize.height * 0.07,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    IconButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const ScreenProfile()));
-                        },
-                        icon: const Icon(Icons.arrow_back)),
-                    SizedBox(width: screenSize.width * 0.1),
-                    Text(
-                      'Edit Profile',
-                      style: TextStyle(
-                          fontSize: isPortrait ? 32 : 24,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
+           const   SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ScreenProfile()));
+                      },
+                      icon: const Icon(Icons.arrow_back)),
+               const   SizedBox(width: 70),
+                const  Text(
+                    'Edit Profile',
+                    style: TextStyle(
+                        fontSize: 32,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
               ),
-              SizedBox(height: screenSize.height * 0.02),
+          const    SizedBox(height: 40),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -82,11 +76,13 @@ class _EditProfileState extends State<EditProfile> {
                       child: CircleAvatar(
                           backgroundImage:
                               image != null ? FileImage(image!) : null,
-                          radius: screenSize.width * 0.2,
                           child: image == null
                               ? Image.asset(
                                   'assets/images/edit-profile-vector-icon.jpg',
+                                  width: 90,
+                                  height: 40,
                                   fit: BoxFit.cover,
+                                  
                                 )
                               : null))
                 ],
@@ -109,7 +105,7 @@ class _EditProfileState extends State<EditProfile> {
                             return null;
                           },
                         ),
-                        SizedBox(height: screenSize.height * 0.02),
+                   const     SizedBox(height: 20),
                         CustomTextField(
                           controller: emailController,
                           labelText: 'Email',
@@ -122,7 +118,7 @@ class _EditProfileState extends State<EditProfile> {
                             return null;
                           },
                         ),
-                        SizedBox(height: screenSize.height * 0.02),
+                     const   SizedBox(height: 20),
                         CustomTextField(
                           controller: passController,
                           labelText: 'Password',
@@ -135,7 +131,7 @@ class _EditProfileState extends State<EditProfile> {
                             return null;
                           },
                         ),
-                        SizedBox(height: screenSize.height * 0.02),
+                    const    SizedBox(height: 20),
                         CustomTextField(
                           controller: confirmController,
                           labelText: 'Confirm Password',
@@ -151,7 +147,7 @@ class _EditProfileState extends State<EditProfile> {
                       ],
                     )),
               ),
-              SizedBox(height: screenSize.height * 0.05),
+           const   SizedBox(height: 40),
               ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
@@ -161,9 +157,7 @@ class _EditProfileState extends State<EditProfile> {
                   },
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.blue,
-                      padding: EdgeInsets.symmetric(
-                          vertical: screenSize.height * 0.02,
-                          horizontal: screenSize.width * 0.2)),
+                      padding:const EdgeInsets.symmetric(vertical: 20, horizontal: 40)),
                   child: const Text(
                     'Update Profile',
                     style: TextStyle(color: Colors.white),

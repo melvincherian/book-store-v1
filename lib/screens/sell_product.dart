@@ -2,6 +2,7 @@
 
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/adapters.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/functions/db_functions.dart';
@@ -29,14 +30,20 @@ class _SellProductState extends State<SellProduct> {
   final _formKey = GlobalKey<FormState>();
   AutovalidateMode _autovalidateMode = AutovalidateMode.disabled;
 
-  final List<String> products = [
-    'HarryPotter',
-    'AtomicHabits',
-    'Darkness',
-    'Ice age',
-    'Fist of fury',
-    'End game',
-  ];
+  List<String> products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    final productList = await fetchProductNames();
+    setState(() {
+      products = productList;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -243,4 +250,11 @@ class _SellProductState extends State<SellProduct> {
       priceController.text = discountedPrice.toStringAsFixed(2);
     }
   }
+}
+
+Future<List<String>> fetchProductNames() async {
+  final productDB = await Hive.openBox<ProductModel>('product_value');
+  final productList = productDB.values.map((product) => product.bookname).toList();
+  await productDB.close();
+  return productList;
 }

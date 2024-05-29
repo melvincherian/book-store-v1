@@ -24,6 +24,7 @@ class _ScreenLogoutState extends State<ScreenLogout> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 243, 247, 250),
       body: SingleChildScrollView(
@@ -45,6 +46,7 @@ class _ScreenLogoutState extends State<ScreenLogout> {
   }
 
   Widget buildHeader(BuildContext context) {
+
     return SizedBox(
       height: 90,
       child: Row(
