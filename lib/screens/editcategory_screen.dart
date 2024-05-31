@@ -77,7 +77,6 @@ class _EditCategoryState extends State<EditCategory> {
                         ? Image.asset(
                             'assets/camera.png',
                             fit: BoxFit.cover,
-                            
                           )
                         : null,
                   ),
@@ -87,7 +86,6 @@ class _EditCategoryState extends State<EditCategory> {
               TextField(
                 controller: nameController,
                 decoration: InputDecoration(
-                 
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(30)),
                     hintText: 'Category name',
@@ -115,7 +113,7 @@ class _EditCategoryState extends State<EditCategory> {
                         style: TextStyle(color: Colors.black),
                       ),
                     ));
-                       
+
                     // Pass back the updated image path to the previous screen
                     // ignore: use_build_context_synchronously
                     Navigator.pop(context, image!.path);

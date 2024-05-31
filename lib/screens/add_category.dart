@@ -27,7 +27,7 @@ class _AddCategoryState extends State<AddCategory> {
   TextEditingController searchController = TextEditingController();
   List<Map<String, dynamic>> savedDetailsList = [];
   List<Map<String, dynamic>> filteredList = [];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -225,7 +225,6 @@ class _AddCategoryState extends State<AddCategory> {
               child: const Text('Delete'),
               onPressed: () {
                 setState(() {
-               
                   savedDetailsList.remove(details);
                   filteredList = savedDetailsList
                       .where((detail) =>

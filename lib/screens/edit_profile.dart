@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, non_constant_identifier_names, use_build_context_synchronously, file_names
+// ignore_for_file: unused_import, file_names, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:flutter/material.dart';
@@ -6,11 +6,14 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/screens/profile_page.dart';
-import 'package:project_week8/structurecodes/editprofiletextfield.dart';
 import 'package:project_week8/widgets/custom_text_field.dart';
 
+import '../structurecodes/editprofiletextfield.dart';
+
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  final Function(File?) updateProfileImage;
+
+  const EditProfile({super.key, required this.updateProfileImage});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -25,7 +28,6 @@ class _EditProfileState extends State<EditProfile> {
   final _formKey = GlobalKey<FormState>();
 
   List<SignUpModel> userData = [];
-
   File? image;
 
   @override
@@ -38,130 +40,114 @@ class _EditProfileState extends State<EditProfile> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('Edit Profile',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        centerTitle: true,
+        backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
       body: SingleChildScrollView(
-        child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-           const   SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
+              const SizedBox(height: 20),
+              GestureDetector(
+                onTap: getImage,
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundImage: image != null ? FileImage(image!) : null,
+                  child: image == null
+                      ? Icon(Icons.person, size: 60, color: Colors.grey[400])
+                      : null,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      controller: usernameController,
+                      labelText: 'Username',
+                      hintText: 'Enter your username',
+                      keyboardType: TextInputType.name,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Username is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: emailController,
+                      labelText: 'Email',
+                      hintText: 'Enter your email',
+                      keyboardType: TextInputType.emailAddress,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email is required';
+                        } else if (!isvalidEmail(value)) {
+                          return 'Enter a valid email';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: passController,
+                      labelText: 'Password',
+                      hintText: 'Enter your password',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    CustomTextField(
+                      controller: confirmController,
+                      labelText: 'Confirm Password',
+                      hintText: 'Re-enter your password',
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Confirm password is required';
+                        } else if (value != passController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 40),
+                    ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const ScreenProfile()));
+                        if (_formKey.currentState!.validate()) {
+                          checkProfile(context);
+                          saveImage();
+                        }
                       },
-                      icon: const Icon(Icons.arrow_back)),
-               const   SizedBox(width: 70),
-                const  Text(
-                    'Edit Profile',
-                    style: TextStyle(
-                        fontSize: 32,
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 12, horizontal: 30),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                      ),
+                      child: const Text('Update Profile',
+                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                    ),
+                  ],
+                ),
               ),
-          const    SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                      onTap: () {
-                        getImage();
-                      },
-                      child: CircleAvatar(
-                          backgroundImage:
-                              image != null ? FileImage(image!) : null,
-                          child: image == null
-                              ? Image.asset(
-                                  'assets/images/edit-profile-vector-icon.jpg',
-                                  width: 90,
-                                  height: 40,
-                                  fit: BoxFit.cover,
-                                  
-                                )
-                              : null))
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        CustomTextField(
-                          controller: usernameController,
-                          labelText: 'Username',
-                          hintText: 'Username',
-                          keyboardType: TextInputType.name,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Username is required';
-                            }
-                            return null;
-                          },
-                        ),
-                   const     SizedBox(height: 20),
-                        CustomTextField(
-                          controller: emailController,
-                          labelText: 'Email',
-                          hintText: 'Email',
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Email is required';
-                            }
-                            return null;
-                          },
-                        ),
-                     const   SizedBox(height: 20),
-                        CustomTextField(
-                          controller: passController,
-                          labelText: 'Password',
-                          hintText: 'Password',
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Password is required';
-                            }
-                            return null;
-                          },
-                        ),
-                    const    SizedBox(height: 20),
-                        CustomTextField(
-                          controller: confirmController,
-                          labelText: 'Confirm Password',
-                          hintText: 'Confirm Password',
-                          keyboardType: TextInputType.text,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Confirm password is required';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    )),
-              ),
-           const   SizedBox(height: 40),
-              ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      checkProfile(context);
-                    }
-                    saveImage();
-                  },
-                  style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue,
-                      padding:const EdgeInsets.symmetric(vertical: 20, horizontal: 40)),
-                  child: const Text(
-                    'Update Profile',
-                    style: TextStyle(color: Colors.white),
-                  )),
             ],
           ),
         ),
@@ -171,36 +157,40 @@ class _EditProfileState extends State<EditProfile> {
 
   Future<void> getImage() async {
     final picker = ImagePicker();
-    final PickedFile = await picker.pickImage(source: ImageSource.gallery);
-    if (PickedFile != null) {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
       setState(() {
-        image = File(PickedFile.path);
+        image = File(pickedFile.path);
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(
-            'No image selected!',
-            style: TextStyle(color: Colors.black),
-          )));
+          content:
+              Text('No image selected!', style: TextStyle(color: Colors.white)),
+        ),
+      );
     }
   }
 
   Future<void> saveImage() async {
     if (image != null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      widget.updateProfileImage(image); // Update the profile image
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           backgroundColor: Colors.green,
-          content: Text(
-            'Profile updated successfully',
-            style: TextStyle(color: Colors.black),
-          )));
+          content: Text('Profile updated successfully',
+              style: TextStyle(color: Colors.white)),
+        ),
+      );
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
           backgroundColor: Colors.red,
-          content: Text(
-            'No image selected!',
-            style: TextStyle(color: Colors.black),
-          )));
+          content:
+              Text('No image selected!', style: TextStyle(color: Colors.white)),
+        ),
+      );
     }
   }
 
@@ -221,30 +211,29 @@ class _EditProfileState extends State<EditProfile> {
         confirmpass.isEmpty) {
       return;
     } else if (!isvalidEmail(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: Colors.red,
-        margin: EdgeInsets.all(16),
-        content: Text('Invalid email format'),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Invalid email format',
+              style: TextStyle(color: Colors.white)),
+        ),
+      );
     }
   }
 
   Future<void> getAlldata() async {
     final bookDB = await Hive.openBox<SignUpModel>('login_db');
     setState(() {
-      userData.clear(); // Clear existing user data
-      userData.addAll(bookDB.values); // Add all user data from the database
+      userData.clear();
+      userData.addAll(bookDB.values);
     });
 
-    // Set retrieved data to the corresponding text controllers
     if (userData.isNotEmpty) {
       setState(() {
         usernameController.text = userData[0].name;
         emailController.text = userData[0].email;
         passController.text = userData[0].password;
-        confirmController.text = userData[0]
-            .password; // Assuming confirmController should have the same value as passController initially
+        confirmController.text = userData[0].password;
       });
     }
   }

@@ -1,5 +1,6 @@
-// ignore_for_file: use_key_in_widget_constructors, file_names
+// ignore_for_file: use_key_in_widget_constructors, library_private_types_in_public_api, file_names
 
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:project_week8/screens/About_Screen.dart';
 import 'package:project_week8/screens/Edit_Profile.dart';
@@ -9,8 +10,29 @@ import 'package:project_week8/screens/Privacy_Screen.dart';
 import 'package:project_week8/screens/Sell_Product.dart';
 import 'package:project_week8/screens/Terms_Service.dart';
 
-class ScreenProfile extends StatelessWidget {
-  const ScreenProfile({Key? key});
+class ScreenProfile extends StatefulWidget {
+  final File? profileImage;
+  
+  const ScreenProfile({Key? key, this.profileImage}) : super(key: key);
+
+  @override
+  _ScreenProfileState createState() => _ScreenProfileState();
+}
+
+class _ScreenProfileState extends State<ScreenProfile> {
+  File? profileImage;
+
+  @override
+  void initState() {
+    super.initState();
+    profileImage = widget.profileImage;
+  }
+
+  void updateProfileImage(File? newImage) {
+    setState(() {
+      profileImage = newImage;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +78,15 @@ class ScreenProfile extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 40),
-            const CircleAvatar(
+            CircleAvatar(
               radius: 80,
-              backgroundImage: AssetImage(
-                'assets/images/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
-              ),
+              backgroundImage: profileImage != null
+                  ? FileImage(profileImage!)
+                  : const AssetImage(
+                      'assets/images/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg',
+                    ) as ImageProvider,
             ),
             const SizedBox(height: 16),
-            const Text(
-              'Melvin Cherian',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 20),
             SizedBox(
               width: 250,
@@ -85,7 +101,10 @@ class ScreenProfile extends StatelessWidget {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const EditProfile()),
+                      builder: (context) => EditProfile(
+                        updateProfileImage: updateProfileImage,
+                      ),
+                    ),
                   );
                 },
                 child: const Text(
@@ -111,8 +130,7 @@ class ScreenProfile extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const ScreenPrivacy()),
+                  MaterialPageRoute(builder: (context) => const ScreenPrivacy()),
                 );
               },
             ),

@@ -137,14 +137,7 @@ class _ScreenLoginState extends State<ScreenLogin> {
                 ),
               ),
               const SizedBox(height: 15),
-              // TextButton(
-              //     onPressed: () {
-              //       // Navigator.push(
-              //       //     context,
-              //       //     MaterialPageRoute(
-              //       //         builder: (context) => ForgotPassword()));
-              //     },
-              //     child: const Text('Forgot Password?')),
+            
               const SizedBox(height: 40),
               const Text('Don\'t have an account?'),
               TextButton(

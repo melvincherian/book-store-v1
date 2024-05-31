@@ -1,10 +1,33 @@
-// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names
+// ignore_for_file: unused_import, invalid_use_of_visible_for_testing_member, invalid_use_of_protected_member, non_constant_identifier_names, avoid_types_as_parameter_names
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:hive/hive.dart';
 import 'package:project_week8/functions/db_functions.dart';
+
+ValueNotifier<List<SellProductModel>> sell = ValueNotifier([]);
+
+Future<void> addSellproduct(SellProductModel value) async {
+  final sellDB = await Hive.openBox<SellProductModel>('sell value');
+  await sellDB.add(value);
+  sell.value.add(value);
+  sell.notifyListeners();
+}
+
+Future<void> saveSellProduct() async {
+  final sellDB = await Hive.openBox<SellProductModel>('sell value');
+  sell.value.clear();
+  sell.value.addAll(sellDB.values);
+  sell.notifyListeners();
+}
+
+Future<void> deleteSellProduct(int id) async {
+  final sellDB = await Hive.openBox<SellProductModel>('sell value');
+  sellDB.delete(id);
+  sell.value.removeWhere((element) => element.id == id);
+  sell.notifyListeners();
+}
 
 class ScreenProfit extends StatefulWidget {
   const ScreenProfit({super.key, required SellProductModel});
@@ -99,75 +122,82 @@ class _ScreenProfitState extends State<ScreenProfit> {
                       ],
                     ),
                   ),
-                  // Line Chart section
+                  // Line Chart section or No Data Message
                   SizedBox(
                     width: double.infinity,
                     height: 400,
-                    child: LineChart(
-                      LineChartData(
-                        lineBarsData: [
-                          LineChartBarData(
-                            spots: lineData,
-                            isCurved: true,
-                            barWidth: 4,
-                            belowBarData: BarAreaData(
-                              show: true,
+                    child: sellProducts.isNotEmpty
+                        ? LineChart(
+                            LineChartData(
+                              lineBarsData: [
+                                LineChartBarData(
+                                  spots: lineData,
+                                  isCurved: true,
+                                  barWidth: 4,
+                                  belowBarData: BarAreaData(
+                                    show: true,
+                                  ),
+                                  dotData: const FlDotData(
+                                    show: true,
+                                  ),
+                                ),
+                              ],
+                              gridData: FlGridData(
+                                show: true,
+                                drawVerticalLine: true,
+                                getDrawingHorizontalLine: (value) {
+                                  return const FlLine(
+                                    color: Colors.grey,
+                                    strokeWidth: 0.5,
+                                  );
+                                },
+                                getDrawingVerticalLine: (value) {
+                                  return const FlLine(
+                                    color: Colors.grey,
+                                    strokeWidth: 0.5,
+                                  );
+                                },
+                              ),
+                              titlesData: FlTitlesData(
+                                bottomTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 22,
+                                    getTitlesWidget: (value, meta) {
+                                      switch (value.toInt()) {
+                                        case 0:
+                                          return const Text('Jan', style: TextStyle(color: Colors.black));
+                                        case 1:
+                                          return const Text('Feb', style: TextStyle(color: Colors.black));
+                                        case 2:
+                                          return const Text('Mar', style: TextStyle(color: Colors.black));
+                                        case 3:
+                                          return const Text('Apr', style: TextStyle(color: Colors.black));
+                                        default:
+                                          return const Text('', style: TextStyle(color: Colors.black));
+                                      }
+                                    },
+                                  ),
+                                ),
+                                leftTitles: AxisTitles(
+                                  sideTitles: SideTitles(
+                                    showTitles: true,
+                                    reservedSize: 28,
+                                    interval: 1,
+                                    getTitlesWidget: (value, meta) {
+                                      return Text('${value.toInt()}k', style: const TextStyle(color: Colors.black));
+                                    },
+                                  ),
+                                ),
+                              ),
                             ),
-                            dotData: const FlDotData(
-                              show: true,
+                          )
+                        :const Center(
+                            child: Text(
+                              'No sales data available',
+                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                             ),
                           ),
-                        ],
-                        gridData: FlGridData(
-                          show: true,
-                          drawVerticalLine: true,
-                          getDrawingHorizontalLine: (value) {
-                            return const FlLine(
-                              color: Colors.grey,
-                              strokeWidth: 0.5,
-                            );
-                          },
-                          getDrawingVerticalLine: (value) {
-                            return const FlLine(
-                              color: Colors.grey,
-                              strokeWidth: 0.5,
-                            );
-                          },
-                        ),
-                        titlesData: FlTitlesData(
-                          bottomTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 22,
-                              getTitlesWidget: (value, meta) {
-                                switch (value.toInt()) {
-                                  case 0:
-                                    return const Text('Jan', style: TextStyle(color: Colors.black));
-                                  case 1:
-                                    return const Text('Feb', style: TextStyle(color: Colors.black));
-                                  case 2:
-                                    return const Text('Mar', style: TextStyle(color: Colors.black));
-                                  case 3:
-                                    return const Text('Apr', style: TextStyle(color: Colors.black));
-                                  default:
-                                    return const Text('', style: TextStyle(color: Colors.black));
-                                }
-                              },
-                            ),
-                          ),
-                          leftTitles: AxisTitles(
-                            sideTitles: SideTitles(
-                              showTitles: true,
-                              reservedSize: 28,
-                              interval: 1,
-                              getTitlesWidget: (value, meta) {
-                                return Text('${value.toInt()}k', style: const TextStyle(color: Colors.black));
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
                   ),
                   // Dropdown menu
                   Container(
@@ -201,58 +231,61 @@ class _ScreenProfitState extends State<ScreenProfit> {
                   ),
                   const SizedBox(height: 2),
                   // Recent sales data
-                  ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: sellProducts.length,
-                    itemBuilder: (context, index) {
-                      final product = sellProducts[index];
-                      return Container(
-                    
-                        margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.3),
-                              spreadRadius: 2,
-                              blurRadius: 5,
-                              offset: const Offset(0, 3),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  product.product,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
+                  sellProducts.isNotEmpty
+                      ? ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: sellProducts.length,
+                          itemBuilder: (context, index) {
+                            final product = sellProducts[index];
+                            return Container(
+                              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    spreadRadius: 2,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
                                   ),
-                                ),
-                                Text(
-                                  '\$${product.price}',
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.grey,
+                                ],
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.product,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        '\$${product.price}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                              ],
-                            ),
-                         
-                          ],
-                          
+                                ],
+                              ),
+                            );
+                          },
+                        )
+                      :const Center(
+                          child: Text(
+                            'No sales data available',
+                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          ),
                         ),
-                        
-                      );
-                    },
-                  ),
                 ],
               ),
             ),
