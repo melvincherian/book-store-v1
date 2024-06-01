@@ -194,6 +194,4 @@ class _NewCategoryState extends State<NewCategory> {
           content: Text(
             'Please select an image!',
             style: TextStyle(color: Colors.white),
-          ),
-        ),
-      );}}}
+          ),), );}}}

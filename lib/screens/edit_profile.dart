@@ -6,14 +6,13 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/screens/profile_page.dart';
+import 'package:project_week8/structurecodes/editprofiletextfield.dart';
 import 'package:project_week8/widgets/custom_text_field.dart';
-
-import '../structurecodes/editprofiletextfield.dart';
 
 class EditProfile extends StatefulWidget {
   final Function(File?) updateProfileImage;
 
-  const EditProfile({super.key, required this.updateProfileImage});
+  const EditProfile({Key? key, required this.updateProfileImage}) : super(key: key);
 
   @override
   State<EditProfile> createState() => _EditProfileState();
@@ -41,8 +40,10 @@ class _EditProfileState extends State<EditProfile> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Edit Profile',
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Edit Profile',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
         leading: IconButton(
@@ -142,8 +143,10 @@ class _EditProfileState extends State<EditProfile> {
                           borderRadius: BorderRadius.circular(8.0),
                         ),
                       ),
-                      child: const Text('Update Profile',
-                          style: TextStyle(fontSize: 18, color: Colors.white)),
+                      child: const Text(
+                        'Update Profile',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
@@ -166,8 +169,7 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content:
-              Text('No image selected!', style: TextStyle(color: Colors.white)),
+          content: Text('No image selected!', style: TextStyle(color: Colors.white)),
         ),
       );
     }
@@ -179,16 +181,14 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.green,
-          content: Text('Profile updated successfully',
-              style: TextStyle(color: Colors.white)),
+          content: Text('Profile updated successfully', style: TextStyle(color: Colors.white)),
         ),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content:
-              Text('No image selected!', style: TextStyle(color: Colors.white)),
+          content: Text('No image selected!', style: TextStyle(color: Colors.white)),
         ),
       );
     }
@@ -214,8 +214,7 @@ class _EditProfileState extends State<EditProfile> {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Invalid email format',
-              style: TextStyle(color: Colors.white)),
+          content: Text('Invalid email format', style: TextStyle(color: Colors.white)),
         ),
       );
     }
@@ -235,6 +234,12 @@ class _EditProfileState extends State<EditProfile> {
         passController.text = userData[0].password;
         confirmController.text = userData[0].password;
       });
+    } else {
+      // Clear the text fields if there are no user data
+      usernameController.clear();
+      emailController.clear();
+      passController.clear();
+      confirmController.clear();
     }
   }
 }

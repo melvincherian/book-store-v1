@@ -34,6 +34,12 @@ class _ScreenProfileState extends State<ScreenProfile> {
     });
   }
 
+  void clearProfile() {
+    setState(() {
+      profileImage = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,6 +67,9 @@ class _ScreenProfileState extends State<ScreenProfile> {
         actions: [
           IconButton(
             onPressed: () {
+              // Call clearProfile when the user logs out
+              clearProfile();
+              
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -200,6 +209,7 @@ class SettingsOverlayScreen extends StatelessWidget {
             children: [
               ElevatedButton.icon(
                 onPressed: () {
+                 
                   _showLogoutConfirmation(context);
                 },
                 icon: const Icon(

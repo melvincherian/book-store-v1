@@ -199,7 +199,7 @@ class _AddCategoryState extends State<AddCategory> {
       ),
     );
   }
-
+ 
   void _navigateToDetailsPage(Map<String, dynamic> details) {
     Navigator.push(context,
         MaterialPageRoute(builder: (context) => DetailsPage(details: details)));

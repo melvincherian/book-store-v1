@@ -195,7 +195,7 @@ class _ScreenProfitState extends State<ScreenProfit> {
                         :const Center(
                             child: Text(
                               'No sales data available',
-                              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                             ),
                           ),
                   ),
@@ -282,8 +282,8 @@ class _ScreenProfitState extends State<ScreenProfit> {
                         )
                       :const Center(
                           child: Text(
-                            'No sales data available',
-                            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                            'No recent sales available',
+                            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                           ),
                         ),
                 ],

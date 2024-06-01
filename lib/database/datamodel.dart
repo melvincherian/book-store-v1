@@ -129,4 +129,9 @@ class SellProductModel {
     int?id
     
   }): id = id ?? DateTime.now().millisecondsSinceEpoch;
+  double get totalPrice {
+    // Convert price to double and multiply by quantity
+    final double priceValue = double.tryParse(price) ?? 0.0;
+    return priceValue * quantity;
+  }
 }

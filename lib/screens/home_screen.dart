@@ -1,6 +1,8 @@
 // ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:project_week8/database/datamodel.dart';
 import 'package:project_week8/screens/Category_Screen.dart';
 import 'package:project_week8/screens/Favourites_Screen.dart';
 import 'package:project_week8/screens/Login_Screen.dart';
@@ -19,6 +21,26 @@ class ScreenHome extends StatefulWidget {
 
 class _ScreenHomeState extends State<ScreenHome> {
   int _selectedIndex = 0;
+  double mostSoldAmount = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchMostSoldAmount();
+  }
+
+  Future<void> _fetchMostSoldAmount() async {
+    final sellDB = await Hive.openBox<SellProductModel>('sell value');
+    double totalAmount = 0.0;
+
+    for (var product in sellDB.values) {
+      totalAmount += product.totalPrice; // Using the totalPrice getter
+    }
+
+    setState(() {
+      mostSoldAmount = totalAmount;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -85,7 +107,7 @@ class _ScreenHomeState extends State<ScreenHome> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           _buildFeatureCard(
-                            title: 'Total Stock',
+                            title: 'Total Stock\n\$${mostSoldAmount.toStringAsFixed(2)}',
                             color: Colors.blue[100]!,
                             icon: Icons.inventory,
                             onTap: () {
