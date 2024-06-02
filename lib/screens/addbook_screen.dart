@@ -1,4 +1,4 @@
-// ignore_for_file: unused_import, library_private_types_in_public_api, use_build_context_synchronously, avoid_print, file_names
+// ignore_for_file: unused_import, library_private_types_in_public_api, avoid_print, use_build_context_synchronously, file_names
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,8 +40,6 @@ class _AddBookPageState extends State<AddBookPage> {
   }
 
   @override
-  
-  
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -163,9 +161,7 @@ class _AddBookPageState extends State<AddBookPage> {
                       volume: _volumeController.text,
                       count: _countController.text,
                       categoryName: _selectCategory.text,
-                      id:null,
-                   
-                   
+                      id: null,
                     );
 
                     try {
@@ -178,8 +174,7 @@ class _AddBookPageState extends State<AddBookPage> {
                         'volume': _volumeController.text,
                         'bookName': _bookNameController.text,
                         'count': _countController.text,
-                        'category': _selectCategory.text,
-                        
+                        'categoryName': _selectCategory.text, // Ensure consistent key
                       });
                     } catch (e) {
                       print("Error saving product: $e");
@@ -198,4 +193,11 @@ class _AddBookPageState extends State<AddBookPage> {
                   ),
                 ),
                 child: const Text('Save', style: TextStyle(fontSize: 16)),
-              ),],),),),);}}
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

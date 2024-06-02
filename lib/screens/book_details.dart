@@ -1,5 +1,3 @@
-// ignore_for_file: file_names
-
 import 'package:flutter/material.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -26,7 +24,6 @@ class DetailsPage extends StatelessWidget {
         padding: const EdgeInsets.all(20.0),
         child: Center(
           child: Card(
-            
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(15.0),
             ),
@@ -71,10 +68,10 @@ class DetailsPage extends StatelessWidget {
                     label: 'Count:',
                     value: '${details['count']}',
                   ),
-                  //  DetailItem(
-                  //   label: 'Category name:',
-                  //   value: '${details['Category name']}',
-                  // ),
+                  DetailItem(
+                    label: 'Category name:',
+                    value: '${details['categoryName']}', // Ensure consistent key
+                  ),
                 ],
               ),
             ),
